@@ -1,0 +1,174 @@
+@charset "utf-8";
+#cards-container{
+	background:none repeat scroll 0 0 #ffffff;
+	padding:20px;
+	width:100%;
+	float:left;
+}
+.contact-card{ margin:0 20px 20px 0;}
+.card-outer{
+	width:280px;
+	border-radius:8px;
+	-moz-border-radius:8px;
+	-webkit-border-radius:8px;	
+	padding:1px;
+	float:left;
+	position:relative;
+	-moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F5F5F5;
+    border-color: #D8D8D8;
+    border-image: none;
+    border-radius: 3px 3px 3px 3px;
+    border-style: solid;
+    border-width: 1px 1px 2px;
+    transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s, width 0.4s ease 0s, padding 0.4s ease 0s, box-shadow 0.4s ease 0s, margin 0.4s ease 0s, border 0.4s ease 0s;
+}
+.contact-card .card-left-block{float:left; padding:10px 0 0 10px;}
+.contact-card .card-left-block img{
+	border: 2px solid #FFFFFF;
+    border-radius: 8px 8px 8px 8px;
+    box-shadow: 0 0 7px #777777;
+    left: -10px;
+    padding: 1px;
+    position: absolute;
+    top: -10px;;
+}
+.contact-card .card-right-block{float:right; width:80%; padding:5px 0; position:relative;}
+.fourty{width:40px;	height:40px;}
+.fifty{width:50px;	height:50px;}
+.eighty{width:80px;	height:80px;}
+.contact-card .card-info{
+	font-size:11px;
+	margin:3px 0;
+	line-height:15px;
+	float:left;
+	width:100%;
+}
+.contact-card .card-username{
+	font-size:14px;
+	font-weight:600;
+	padding:0;
+	margin:0;
+}
+.contact-card .card-username .h-row{
+	margin:6px 0;
+	width:100%;
+	background: url("../img/images/seprator-line-vertical.png") no-repeat scroll -232px 0 transparent; 
+	height:1px; 
+	width:99%; 
+	border:none;
+}
+.contact-card .card-icon{
+	background: url("../img/images/card-icons.png") no-repeat scroll 0 0 transparent; 
+	float:left;
+	width:20px;
+	height:18px;
+}
+.contact-card .card-text{
+	float:left;
+}
+.contact-card .card-job .card-icon{
+	background-position:left -83px;
+}
+.contact-card .card-address .card-icon{
+	background-position:left -48px;
+}
+.contact-card .card-phone .card-icon{
+	background-position:left -100px;
+}
+.contact-card .bottom-icons{
+	position:absolute;
+	bottom:0;
+	right:0;
+}
+.contact-card .bottom-icons .card-bottom-icon{
+	font-size:0;
+	width:24px;
+	height:24px;
+	display:inline-block;
+}
+.contact-card .bottom-icons .card-message{
+	background: url("../img/images/card-icons-bottom.png") no-repeat scroll left center transparent; 
+	width:33px;
+}
+.contact-card .bottom-icons .card-favorite{
+	background: url("../img/images/card-icons-bottom.png") no-repeat scroll center center transparent; 
+}
+.contact-card .bottom-icons .card-flip{
+	background: url("../img/images/card-icons-bottom.png") no-repeat scroll right center transparent; 
+}
+/***** Second design styling, Karan[2013-08-11] *****/
+.contact-card-2{
+	border:solid 1px #666;
+	width:275px;
+	float:left;
+	margin: 10px;
+	padding: 0;
+
+   background-color: #F5F5F5;
+    border-color: #D8D8D8;
+    border-image: none;
+    border-radius: 3px 3px 3px 3px;
+    border-style: solid;
+    border-width: 1px 1px 2px;
+    transition: left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s, width 0.4s ease 0s, padding 0.4s ease 0s, box-shadow 0.4s ease 0s, margin 0.4s ease 0s, border 0.4s ease 0s;
+}
+.card-top-img-name{
+	border-bottom: 1px solid #CCCCCC;
+    float: left;
+    height: 46px;
+    margin: 10px 10px 0;
+    padding-bottom: 10px;
+    width: 93%;
+}
+.card-top-img-name img{
+	border:solid 2px #666666;
+	border-radius:25px;
+	-moz-border-radius:25px;
+	-webkit-border-radius:25px;	
+	padding:1px;
+	vertical-align:middle;
+	height:42px;
+}
+.card-top-img-name span{
+	font-size:16px;
+	font-weight:bold;
+	padding-left:6px;
+}
+.card-bottom-block{
+	margin-top:10px;
+	float:left;
+	margin:10px;
+	width:92%;
+}
+.card-bottom-block  .card-info{
+	font-size:11px;
+	margin:3px 0;
+	line-height:15px;
+	float:left;
+	width:100%;
+}
+.card-bottom-block .card-username{
+	font-size:14px;
+	font-weight:600;
+	padding:0;
+	margin:0;
+}
+.card-bottom-block .card-icon{
+	background: url("../img/images/card-icons.png") no-repeat scroll 0 0 transparent; 
+	float:left;
+	width:20px;
+	height:18px;
+}
+.card-bottom-block .card-job .card-icon{
+	background-position:left -83px;
+}
+.card-bottom-block .card-address .card-icon{
+	background-position:left -48px;
+}
+.card-bottom-block .card-phone .card-icon{
+	background-position:left -100px;
+}

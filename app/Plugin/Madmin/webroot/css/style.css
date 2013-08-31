@@ -1,0 +1,756 @@
+/**
+ * @import another stylesheet.
+ * */
+/*@import url('css-classes.css');*/
+
+/*
+	Reset default browser CSS
+	-----------------------------------
+*/
+*{margin:0px; padding:0px;}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td
+ {
+	border: 0;
+	font-size: 100%;
+	
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+table, tr, td {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+a img{ border: 0 }
+a:hover{opacity: 0.8;}
+/*
+	Layout
+	------------------
+*/
+#wrapper{
+	width:100%;
+	height:100%;
+	position:relative;
+}
+#header{
+	width:100%;
+	height:auto;
+}
+#header-content{
+	width:1003px;
+	margin:auto auto;
+	overflow:auto;
+}
+#content-wrapper{
+	
+}
+#content{
+	/*width:1003px;*/
+	width:1008px;
+	margin:auto auto;
+	min-height:300px;
+	height:auto;
+	overflow:auto;
+}
+
+#sidebar{
+	width:200px;
+	border:1px solid #666666;
+	border-top:none;
+	float:left;
+	margin-bottom:15px;
+	
+}
+#workspace{
+	padding:15px;
+	max-width:770px;
+	float:left;
+}
+#footer{
+	margin-bottom:15px;
+	text-align: center;
+	color: #fff;
+	font-size: 10px;
+	font-weight: bold;
+}
+
+#footer a{
+	color: #fff;
+	text-decoration: none;
+}
+/*
+	Structure Header Area
+	------------------------
+*/
+
+.logo{
+	margin:2px;	
+	float:left;
+}
+.header-logout{
+   float:right;
+   vertical-align:middle;
+   line-height:35px;
+   font-size:100%;
+}
+.header-logout a{
+   color:#fff;
+   text-decoration:none;
+   font-weight:bold;
+}
+.strip{
+   height:35px;
+   width:100%;
+   line-height:35px;
+   background:rgb(28, 120, 28);
+}
+
+#header-strip-content{
+   width:1003px;
+   margin:auto;
+   display:block;
+}
+
+.current_date{
+   width:200px;
+   float:left;
+   margin:auto auto;
+   display:block;
+   text-align:center;
+}
+.date{
+   text-align:left;
+   color:#000;
+   font-weight: 100;
+}
+.search-table tr td, .search-table tr th{
+	border-bottom: 1px solid #666;
+}
+.search-table tr td, .search-table tr th{
+	border-bottom: 1px solid #666;
+}
+.form-table table{
+	border: 1px solid #666;
+}
+.form-table table tr td, .form-table th{
+	border-bottom: 1px solid #666;
+}
+/*
+	Structure Sidebar 
+	--------------------
+*/
+
+ul.menu{
+	padding-top:20px;
+}
+ul.menu li{
+	border-bottom:1px solid #666666;
+	padding:8px 5px;
+	
+}
+ul.menu li.m-option{padding-left: 15px;}
+ul.menu li a{
+	text-decoration:none;
+	color:black;
+}
+
+
+/*
+	Structure Workspace
+	------------------------
+*/
+
+.content-heading-table {
+	margin-top:10px;
+    width: 100%;
+}
+
+.content-heading-table .content-heading {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+	padding:0px;
+    padding-bottom: 5px;
+    width: 550px;
+}
+.content-heading-table .page-description{
+	padding:10px 0;
+}
+.content-heading-table .new-link {
+    border: 1px solid #999999;
+    font-size: 10px;
+    margin-top: 10px;
+    padding: 5px 0;
+    width: 550px;
+}
+
+/* Structure Tabs  */
+
+ul.tabs{
+	float:left;
+}
+ul.tabs li{
+	float:left;
+	margin-right:5px;
+	border:1px solid #999999;
+	padding:1px;
+	/*margin-bottom:10px;*/
+	background:#EBEBEB;
+}
+ul.tabs li a{
+	display:block;
+	background:#EBEBEB;
+	display:block;
+	padding:5px 5px;
+	text-decoration: none;
+	color:black;
+	font-weight: bold;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:12px;
+}
+ul.tabs li a:hover, ul.tabs li.active-tab a{
+	/*background:rgb(28, 120, 28);*/
+	background:url("../img/images/button_back.png");
+	color:white;
+}
+
+/*
+	Global Element
+	---------------------
+*/
+.search-table a, .index-table a, .form-table a{
+	color:black;
+	text-decoration:none;
+}
+.search-table a:hover, .index-table a:hover, .form-table a:hover{
+   text-decoration:underline;
+}
+.workspace a:hover{
+   text-decoration:underline;
+}
+
+.pagination-info{
+	margin-bottom:20px;
+	float: left;
+}
+
+.required-label{
+	color:red;
+}
+
+.meta-info{
+	color:#666;
+	font-size:10px;
+	padding:2px 0px;
+	display:inline-block;
+}
+/*** Messages***/
+#confirmation-msg{
+    width:747px;
+}
+#confirmation-msg div{
+	width:100%;
+    margin: 5px auto;
+    border:1px dashed #ccc;
+    padding: 6px 10px;
+    border-radius:2px;
+    font-weight:bold;
+    text-align: left;
+}
+
+#confirmation-msg div.warning, #confirmation-msg #authMessage{
+    border-color:#fed0af;
+    background-color:#fff1e8;
+    color:#fd9344;
+}
+
+#confirmation-msg div.error{
+    border-color:#fc6861;
+    background-color:#fee8e7;
+    color:#dd0f04;
+}
+
+#confirmation-msg div.success{
+    border-color:#127a03;
+    background-color:#e2fede;
+    color:#0a9902;
+}
+.confirmation-msg{
+   line-height:20px;
+}
+
+.message{
+   padding:3px 8px;
+}
+
+span.error-message, label.error-message, div.error-message, span.error, label.error, div.error{
+   color:red;
+   font-size:10px;
+}
+
+
+/*
+	Tables
+	-----------
+*/
+
+table{
+	width:100%;
+}
+td{
+   padding: 5px;
+}
+th{
+	background:#EBEBEB;
+	line-height:16px;
+	padding: 4px;
+}
+.border-row, .border-row tr{
+	border:1px solid #666;
+}
+tr.border-row td{
+	border:none;
+}
+
+/**********	Start Active menu bar links ***************/
+.active_menu{
+	background:#1C781C !important;
+}
+.active_menu a{
+	color:#FFFFFF !important;
+}
+.active_submenu{
+	background:#EBEBEB !important;
+}
+.active_submenu a{
+	color:#000000 !important;
+	font-weight:bold;
+}
+/**********	End Active menu bar links ***************/
+.center{
+	padding:5px;
+}
+.border-col, .border-col td, .border-col th{
+	border:1px solid #666;
+}
+.border-table{
+	border:1px solid black
+}
+
+.search-table{
+	font-weight:bold;
+	margin-bottom:20px;
+	margin-top:20px;
+	float:left;
+}
+.search-label{
+	width:200px;
+}
+.search-control{
+	width:200px;
+}
+.content-cell{
+	padding:8px 8px 0px 8px;
+}
+.form-buttons{
+	padding:5px 10px 5px 150px;
+}
+.form-label{
+	width:25%;
+	text-align:right;
+}
+.form-control{
+    width:250px;
+}
+
+#order-detail-view-page table tr td.form-control{
+	width:25%;
+}
+.right-border{
+	border-right:1px solid #666;
+}
+.bold{
+	font-weight:bold;
+}
+.bold-top-border{
+	border-top:2px solid #666 !important;
+}
+.index-table{
+    clear: both;
+}
+.form-table, .form-table tr, .form-table td{
+	/*border-bottom:1px solid;*/
+	border-color:#666666;
+}
+.form-table{
+	margin-top:10px;
+	float:left;
+}
+
+.info-table{
+	width:50%;
+	margin-bottom:20px;
+	margin-top:20px;
+}
+.info-table, .info-table tr, .info-table td{
+	border-color:#666666;
+}
+.info-table tr{
+	height: 26px;
+}
+
+/** LOGIN SECTION**/
+#form-login{
+   width:30%;
+   margin:auto;
+   margin-top:30px;
+   margin-bottom:200px;
+}
+
+#form-login table th{
+   background:none;
+   font-size:18px;
+   line-height:2;
+   color:rgb(28, 120, 28);
+}
+
+/*
+	Forms
+	--------
+*/
+
+input[type='text'], input[type='email'], input[type='password'], input[type='number']{
+	width:200px;
+	border:1px solid #999;
+	padding:2px 2px;
+	
+}
+
+select{
+	width:205px;
+	border:1px solid #999;
+	padding:2px 2px;
+	
+}
+.datetime{
+   width:auto;   
+}
+
+input[type='radio']{
+   margin-right:4px;
+}
+
+input.small{
+	width:30px;
+}
+textarea{
+	width:200px;
+	border:1px solid #999;
+	height:50px;
+}
+textarea.fullwidth{
+	width:90%;
+}
+
+/*
+	Alilgnment
+	------------
+*/
+.a-left{ text-align:left }
+.a-right { text-align:right }
+.a-center { text-align:center }
+
+/*
+	Pagination
+*/
+div.paging {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #CCCCCC;
+    width: 100%;	
+}
+
+div.paging span{
+   padding: 5px;   
+}
+
+div.paging span.current{
+   color: rgb(28, 120, 28);
+   font-weight: bold;
+   text-decoration: underline;
+}
+
+div.paging .disabled {
+    color: #DDDDDD;
+    display: inline;
+}
+
+div.paging span {
+}
+
+div.paging .current {
+    color: #000000;
+}
+
+/*
+	Fonts & Color
+	--------------------
+*/
+
+body{
+	font-family:Verdana,Arial,sans-serif;
+	font-size:11px;
+	color:black;
+}
+.strip{
+   	background:url("../img/images/main_link_bg.png");
+    height:35px;
+   	width:100%;
+   	line-height:35px;
+}
+/** header **/
+.header-logout{
+	font-family:Arial,Helvetica,sans-serif;
+	font-weight:bold;
+}
+.current_date{
+	color:white;
+	font-weight:bold;
+}
+
+/** sidebar **/
+.menu{
+	font-size:12px;
+}
+ul.menu li.m-header a{
+	font-family:Arial,Helvetica,sans-serif;
+	color:rgb(28, 120, 28);
+	font-weight:bold;
+	font-size:13px;
+}
+ul.menu li.m-header{
+	font-family:Arial,Helvetica,sans-serif;
+	color:#000;
+	font-weight:bold;
+	font-size:13px;
+}
+
+ul.menu li.m-option a{
+	color:black;
+}
+ul.menu li.m-last-option{
+	border-bottom:2px solid #666666;
+}
+ul.menu li.user-info, .user-info{
+   color:#666666;
+   font-size:10px;
+   padding:10px;
+   border:none;
+}
+/** workspace **/
+.content-heading-table .content-heading {
+   border-bottom: 1px dotted #ADADAD;
+   color: rgb(28, 120, 28);
+   font-family: Arial,Helvetica,sans-serif;
+}
+
+/***
+ * Globel Class functions.
+ * */
+
+.button{
+   background:url("../img/images/button_back.png");
+   border: none;
+   color: #FFFFFF;
+   cursor: pointer;
+   font-family: Arial,Helvetica,sans-serif;
+   font-size: 11px;
+   font-weight: bold;
+   padding: 4px 8px;
+   border-radius: 3px;
+   width: auto;
+}
+
+a.button{
+   padding: 5px 8px;
+}
+
+.btnDeleteRow{padding: 3px 5px;}
+.btnAddNew{padding: 2px 5px;}
+
+.button:hover{
+   background:url("../img/images/button_back_hover.png");
+}
+
+.form-buttons a:hover{
+   text-decoration: none;
+}
+
+.clear-both{
+   clear:both;
+}
+
+.hide{
+   display:none;
+}
+
+.show{
+   display:compact;
+}
+
+/************ class for no property apply *******/
+.no-border{
+   border:none !important;
+}
+
+.no-padding{
+   padding:0 !important;
+}
+
+
+.search-table a.button, .index-table a.button, .form-table a.button{
+   color:#fff;
+}
+
+/***************** FOR MULTIPLE SELECTION ************/
+td.multi-checkbox{
+   padding: 10px 0px;
+}
+td.multi-checkbox div.checkbox{
+   width:20%;
+   float:left;
+}
+
+td.multi-checkbox div.checkbox input{
+   margin: 5px;
+}
+.required_fields{
+    color:#f00;
+}
+.right-align{
+	text-align:right;
+	float:right;
+	margin-right:10px;
+}
+/****************** Plan Form ************************/
+.form-heading{font-weight:bold;}
+#form-login .forgot_password{text-decoration: none; margin-left: 20px; color:#000;}
+/****************** End Plan Form ************************/
+.page_link_tr{
+	display:none;
+}
+span.error-message, label.error-message, div.error-message, span.error, label.error, div.error{
+	font-family:arial;
+	font-size:11px;
+	padding: 4px 0px 0px;
+}
+.field-value{
+	width:150px;
+}
+#menubutton {
+	clear: both;
+	/*margin-bottom: 10px;*/
+	float:left;
+}
+a.active_tab {
+	border: 1px solid #000000;
+	cursor: pointer;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	height: 24px;
+	padding: 4px 5px;
+	text-decoration: none;
+	width: auto;
+	background:#1c5978;
+	color:#FFFFFF;
+}
+a.inactive_tab {
+	background-color: #EBEBEB;
+	border: 1px solid #000000;
+	color: #1c5978;
+	cursor: pointer;
+	font-family: Arial,Helvetica,sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	height: 24px;
+	padding: 4px 5px;
+	text-decoration: none;
+	width: auto;
+}
+a.inactive_tab:hover, .admin_button {
+	background: none repeat scroll 0 0 #1c5978;
+	border: 1px solid #000000 ;
+	color: #FFFFFF ;
+}
+
+a.inactive_tab {
+	background-color: #EBEBEB;
+	border: 1px solid #000000;
+	color: #1c5978;
+}
+span.fixed-width{
+	float:left;
+	width:140px;
+}
+.fixed-th{
+	width:106px;
+}
+a.change-password-link{
+	margin-left:5px;
+	color:#1C5978;
+	text-decoration:underline;
+}
+a.back{
+	float:left;
+}
+span.csv-export-img{
+	float:left;
+	/*margin-right:10px;*/
+	margin-top:-5px;
+	height:auto;
+	padding:5px;
+}
+span.csv-export-img a{
+	text-decoration:none;
+}
+.user-info ul li{
+	padding:0px 0px 2px 0px;
+	border-bottom:none;
+}
+.display-none{
+	display:none !important;
+}
+.prices-validate label{
+	width:100%;
+	float:left;
+}
+.book_info{
+    float: left;
+    font-size: 9px;
+    padding-top: 3px;
+    color:#747474;
+}
+.td_style {
+	float: left;
+    width: 243px;
+    word-wrap: break-word;
+}
+.td_padding {
+	padding: 0px 3px;
+}
+
+.right_float{
+   float:right;
+}
