@@ -9,4 +9,10 @@
 			0 => 'Inactive'
 		)
 	);
+	
+	$config['Email_Templates'] = array(
+		'REGITER' => 'register',
+		'REGITER_SOCIAL_USER' => 'social_user_password_welcome',
+		'WELCOME' => 'welcome_mail'
+	);
 ?>

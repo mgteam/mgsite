@@ -4,7 +4,12 @@ App::uses('AppModel', 'Model');
  * Contact Model
  *
  * @property User $User
+ * @property ConnectedNetwork $ConnectedNetwork
+ * @property ContactPicture $ContactPicture
+ * @property Education $Education
+ * @property Language $Language
  * @property SocialMedia $SocialMedia
+ * @property Work $Work
  * @property User $User
  */
 class Contact extends AppModel {
@@ -22,7 +27,7 @@ class Contact extends AppModel {
  * @var string
  */
     public $virtualFields = array(
-        'name' => 'CONCAT(User.first_name, " ", User.last_name)'
+        'name' => 'CONCAT(Contact.first_name, " ", Contact.last_name)'
     );
 
 	/**
@@ -96,8 +101,60 @@ class Contact extends AppModel {
 			'finderQuery' => '',
 			'counterQuery' => ''
 		),
-        'SocialMedia' => array(
+		'ContactPicture' => array(
+			'className' => 'ContactPicture',
+			'foreignKey' => 'contact_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Education' => array(
+			'className' => 'Education',
+			'foreignKey' => 'contact_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Language' => array(
+			'className' => 'Language',
+			'foreignKey' => 'contact_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'SocialMedia' => array(
 			'className' => 'SocialMedia',
+			'foreignKey' => 'contact_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Work' => array(
+			'className' => 'Work',
 			'foreignKey' => 'contact_id',
 			'dependent' => false,
 			'conditions' => '',
@@ -133,4 +190,59 @@ class Contact extends AppModel {
 			'insertQuery' => ''
 		)
 	);
+    
+/**
+ *  check is social user exists.
+ *
+ *  @author Lucky Saini.
+ *  @param social id and email id.
+ *  @return boolean.
+ **/
+    public function isSocialUserExists($oid = null, $email = null) {
+        if(!empty($email)) {
+            $exists = $this->field('id', array('Contact.email' => $email));
+            
+            if (!$exists) {
+                $exists = $this->isSocialIdExists($oid);
+            }
+        } else {
+            $exists = $this->isSocialIdExists($oid);
+        }
+        return $exists;
+    }
+    
+/**
+ *  check is social id of user exists.
+ *
+ *  @author Lucky Saini.
+ *  @param social id.
+ *  @return boolean.
+ **/
+    public function isSocialIdExists($oid = null) {
+        $exists = false;
+        if ($oid) {
+            $exists = $this->field('id', array('Contact.oid' => $oid));
+        }
+        return $exists;
+    }
+    
+/**
+ *  set models for getting data from contact and related tables.
+ *
+ *  @author Lucky Saini.
+ *  @return array of contain models and their fields.
+ **/
+    public function containForProfile() {
+        return array(
+			'Education' => array(
+				'fields' => array('id', 'city', 'university', 'start_date', 'end_date', 'is_studying', 'class')
+			),
+			'Work' => array(
+				'fields' => array('id', 'employer', 'position', 'city', 'description', 'start_date', 'end_date', 'is_currently_working')
+			),
+			'Language' => array(
+				'fields' => array('id', 'title')
+			)
+		);
+    }
 }

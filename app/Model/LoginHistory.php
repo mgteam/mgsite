@@ -36,7 +36,7 @@ class LoginHistory extends AppModel {
 		$data['session_id'] = $sessionId;
 		if($isLogin){
 			$this->checkTimeout($sessionId, $userId);
-			$data['log_in_datetime'] = date(TimeFormat::DatabaseDate);
+			$data['log_in_datetime'] = date(TimeFormat::DatabaseDateTime);
 			$data['id'] = false;
 			$data['ip'] = UserSystemInfo::getIp();
 			$userInfo = UserSystemInfo::findLocation($data['ip']);
@@ -48,7 +48,7 @@ class LoginHistory extends AppModel {
 			$data['longitude'] = $userInfo['longitude'];
 		} else {
 			$data['id'] = $this->field('id', array('LoginHistory.session_id' => $sessionId));
-			$data['log_out_datetime'] = date(TimeFormat::DatabaseDate);
+			$data['log_out_datetime'] = date(TimeFormat::DatabaseDateTime);
 		}
 		$data['user_id'] = $userId;
 		if($this->save($data)){
@@ -73,7 +73,7 @@ class LoginHistory extends AppModel {
 		$user_history = $this->getRecord($options);
 		if ($user_history) {
 			if ($user_history['LoginHistory']['session_id'] != $sessionId) {
-				$user_history['LoginHistory']['log_out_datetime'] = date(TimeFormat::DatabaseDate);
+				$user_history['LoginHistory']['log_out_datetime'] = date(TimeFormat::DatabaseDateTime);
 				$this->save($user_history);
 			}
 		}

@@ -97,7 +97,6 @@ class ExtAuthComponent extends Component {
 		if (!$accessToken) {
 			$accessToken = $this->Session->read($this->settings['sessionVariableAccessToken']);
 		}
-
 		return $this->mechanism->apiRequest(
 			$this->provider,
 			$accessToken,
@@ -148,6 +147,7 @@ class ExtAuthComponent extends Component {
 		$fileName = $className . '.php';
 
 		foreach($this->settings[$type . 'Path'] as $path) {
+
 			if (file_exists($path . $fileName)) {
 				require($path . $fileName);
 				$plugin = new $className;

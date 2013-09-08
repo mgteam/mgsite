@@ -35,6 +35,15 @@ App::uses('Controller', 'Controller');
 class AppController extends Controller {
 
 /**
+ * Helpers
+ *
+ * @var array
+ */
+	public $helpers = array(
+		'Timthumb.Timthumb'
+	);
+	
+/**
  * Components
  *
  * @var array
@@ -67,7 +76,7 @@ class AppController extends Controller {
 		}
 
 		$this->layout = 'client';
- 		$this->Auth->loginRedirect  = array( 'controller' => 'users', 'action' => 'index');
+ 		$this->Auth->loginRedirect  = array( 'controller' => 'profile', 'action' => 'profile_page');
 		$this->Auth->logoutRedirect = array('controller' => 'users', 'action' => 'login');
 		$this->Auth->loginAction = array('controller' => 'users', 'action' => 'login');
 		$this->Auth->allow(

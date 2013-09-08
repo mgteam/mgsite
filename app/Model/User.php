@@ -312,7 +312,7 @@ class User extends AppModel {
 			$this->id = $userId;
 		}
 		if ($this->exists()) {
-			return $this->saveField($field, date(TimeFormat::DatabaseDate, time()));
+			return $this->saveField($field, date(TimeFormat::DatabaseDateTime, time()));
 		}
 		return false;
 	}
@@ -334,7 +334,7 @@ class User extends AppModel {
 			$sixtyMins = time() + 43000;
 			$token = $this->generatePassword();
 			$user['User']['password_token'] = $token;
-			$user['User']['email_token_expires'] = date(TimeFormat::DatabaseDate, $sixtyMins);
+			$user['User']['email_token_expires'] = date(TimeFormat::DatabaseDateTime, $sixtyMins);
 			$user = $this->save($user, false);
 			$this->data = $user;
 			return $user;
@@ -355,7 +355,7 @@ class User extends AppModel {
 			'conditions' => array(
 				$this->alias . '.is_active' => 1,
 				$this->alias . '.password_token' => $token,
-				$this->alias . '.email_token_expires >=' => date(TimeFormat::DatabaseDate))));
+				$this->alias . '.email_token_expires >=' => date(TimeFormat::DatabaseDateTime))));
 		if (empty($user)) {
 			return false;
 		}
@@ -492,19 +492,14 @@ class User extends AppModel {
 		extract(array_merge($defaults, $options));
 
 		$postData = $this->_beforeRegistration($postData, $emailVerification);
-
 		if ($removeExpiredRegistrations) {
 			$this->_removeExpiredRegistrations();
 		}
 
 		// getting user info.
 		$userInfo['User'] = isset($postData['User']) ? $postData['User'] : null;
-
-		// getting baby info.
-		//$babyInfo['UserBaby'] = isset($postData['UserBaby']) ? $postData['UserBaby'] : null;
-
+        
 		$this->set($userInfo);
-		//$this->UserBaby->set($babyInfo['UserBaby']);        
 		if ($this->validates()) {
 			$postData['User']['password'] = $this->hash($postData['User']['password'], 'sha1', true);
 			$postData['User']['group_id'] = UserGroup::User;
@@ -519,36 +514,6 @@ class User extends AppModel {
 		}
 		return false;
 	}
-
-
-
-/**
- * Registers a new user without varification
- *
- * @param array $postData Post data from controller
- * @return mixed
- */
-	/*public function register_checkout_user($postData = array()) {
-		$postData['User']['email_verified'] = ACTIVE;
-		$postData['User']['tos'] = ACTIVE;
-		// getting user info.
-		$userInfo['User'] = isset($postData['User']) ? $postData['User'] : null;
-		$this->set($userInfo);
-
-		if ($this->validates()) {
-			$postData['User']['password'] = $this->hash($postData['User']['password'], 'sha1', true);
-			$postData['User']['group_id'] = UserGroup::User;
-			$this->create();
-			
-			// saving user info.
-			if($this->saveAssociated($postData, array('validate'=>false ))){
-				$this->data = $postData;
-				$this->data['User']['id'] = $this->id;
-				return $this->data;
-			}
-		}
-		return false;
-	}*/
 
 /**
  * Resends the verification if the user is not already validated or invalid
@@ -583,7 +548,7 @@ class User extends AppModel {
 		}
 
 		$user['User']['email_token'] = $this->generatePassword();
-		$user['User']['email_token_expires'] = date(TimeFormat::DatabaseDate, time() + 86400);
+		$user['User']['email_token_expires'] = date(TimeFormat::DatabaseDateTime, time() + 86400);
 
 		return $this->save($user, false);
 	}
@@ -618,7 +583,7 @@ class User extends AppModel {
 	protected function _beforeRegistration($postData = array(), $useEmailVerification = true) {
 		if ($useEmailVerification == true) {
 			$postData['User']['email_token'] = $this->generatePassword();
-			$postData['User']['email_token_expires'] = date(TimeFormat::DatabaseDate, time() + 86400);
+			$postData['User']['email_token_expires'] = date(TimeFormat::DatabaseDateTime, time() + 86400);
 		} else {
 			$postData['User']['email_verified'] = 1;
 		}
@@ -685,6 +650,18 @@ class User extends AppModel {
 	protected function _removeExpiredRegistrations() {
 		$this->deleteAll(array(
 			$this->alias . '.email_verified' => 0,
-			$this->alias . '.email_token_expires <' => date(TimeFormat::DatabaseDate)));
-	}    
+			$this->alias . '.email_token_expires <' => date(TimeFormat::DatabaseDateTime)));
+	}
+    
+/**
+ *  check is user already registered.
+ *
+ *  @access public.
+ *  @param mixed email id.
+ *  @return boolean.
+ **/
+    public function isRegistered($email) {
+        $return = $this->field('id', array('User.email' => $email));
+        return $return;
+    }
 }

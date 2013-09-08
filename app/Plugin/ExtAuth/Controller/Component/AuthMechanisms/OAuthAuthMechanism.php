@@ -5,6 +5,7 @@ require_once('AbstractAuthMechanism.php');
 abstract class OAuthAuthMechanism extends AbstractAuthMechanism {
 
 	public function loginCallback($provider, $requestToken, $callbackURL) {
+	
 		$accessToken = $this->getAccessToken($provider, $requestToken, $callbackURL);
 
 		if ($accessToken['success']) {

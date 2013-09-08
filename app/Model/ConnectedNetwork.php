@@ -32,20 +32,20 @@ class ConnectedNetwork extends AppModel {
 		)
 	);
 
-	/**
-	 * hasMany associations
-	 *
-	 * @var array
-	 */
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
 	public $hasMany = array();
 
-	/**
-	 * Constructor
-	 *
-	 * @param string $id ID
-	 * @param string $table Table
-	 * @param string $ds Datasource
-	 */
+/**
+ * Constructor
+ *
+ * @param string $id ID
+ * @param string $table Table
+ * @param string $ds Datasource
+ */
 	/*public function __construct() {
 		$this->_setupValidation();
 	}*/  

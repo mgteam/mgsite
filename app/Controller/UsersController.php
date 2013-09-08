@@ -1,6 +1,7 @@
 <?php
 App::uses('AppController', 'Controller');
-
+App::uses('Image', 'Lib');
+App::uses('SetUserSocialDetail', 'Lib');
 //Import OAuth Class
 App::import('Vendor', 'OAuth/OAuthClient');
 
@@ -15,7 +16,7 @@ class UsersController extends AppController {
 	
     public function beforeFilter(){
         parent::beforeFilter();
-        $this->Auth->allow('login', 'verify', 'auth_login', 'auth_callback');
+        $this->Auth->allow('login', 'verify', 'auth_login', 'auth_callback', 'data');
     }
     
 /**
@@ -40,7 +41,7 @@ class UsersController extends AppController {
 			if ($this->Auth->login()) {
                 $user_id = $this->Auth->user('id');
 				$this->User->id = $user_id;
-				$this->User->saveField('last_login', date(TimeFormat::DatabaseDate));
+				$this->User->saveField('last_login', date(TimeFormat::DatabaseDateTime));
                 $this->saveHistory($user_id);
 				if ($this->here == $this->Auth->loginRedirect) {
                     $this->Auth->loginRedirect = '/';
@@ -57,7 +58,7 @@ class UsersController extends AppController {
 				}
                 
 				$this->Session->setFlash(sprintf(__d('users', '%s, you have successfully logged in.'), $this->Auth->user('name')), 'default', array('class'=>'success'));
-				$this->redirect($this->Auth->redirect());
+				$this->redirect($this->Auth->loginRedirect);
 			} else {
 				$this->request->data['User']['password'] = null;
 				$this->Session->setFlash(sprintf(__d('users', 'Invalid e-mail / password combination.  Please try again.')), 'default', array('class'=>'error'));
@@ -67,7 +68,8 @@ class UsersController extends AppController {
     
 /**
  * Common logout action
- *
+ * 
+ * @author Lucky Saini.
  * @return void
  */
 	public function logout() {
@@ -81,11 +83,12 @@ class UsersController extends AppController {
 		$this->redirect($this->Auth->logout());
 	}
     
-	/**
-	 * User register action
-	 *
-	 * @return void
-	 */
+/**
+ * User register action
+ *
+ * @author Lucky Saini.
+ * @return void
+ */
 	public function register() {
 		$namedArgs = $this->passedArgs;
 		$this->layout = Layouts::FrontendLogin;
@@ -98,22 +101,8 @@ class UsersController extends AppController {
 			$this->request->data['User']['group_id'] = UserGroup::User;
 			$user = $this->User->register($this->request->data);
 			if ($user !== false) {
-                
-				// SENDING ACTIVATION EMAIL
-				$options = array();
-                $options['to'] = $user['User']['email'];
-                $options['from'] = array(EMIL_FROM => TITLE);
-                $options['subject'] = Configure::read('EMAIL_SUBJECTS.REGISTER');
-                $options['template'] = 'register';
-                $options['viewVars'] = array(
-                    'user' => array(
-                        'first_name' => $user['User']['first_name'],
-                        'last_name' => $user['User']['last_name'],
-                        'email' => $user['User']['email'],
-                        'token' => $user['User']['email_token_expires']
-                    )
-                );
-                SendMail::sendEmail($options);
+                $user['template'] = Configure::read('Email_Templates.REGITER');
+				$this->sendRegisterMail($user);
 				$this->Session->setFlash(__d('users', 'Your account has been created. You should receive an e-mail shortly to authenticate your account. Once validated you will be able to login.'), 'default', array('class'=>'success'));
 				$this->redirect(array('action' => 'login'));
 			} else {
@@ -139,7 +128,7 @@ class UsersController extends AppController {
 			$options['to'] = $userDetail['User']['email'];
 			$options['from'] = array(EMIL_FROM => TITLE);
 			$options['subject'] = Configure::read('EMAIL_SUBJECTS.WELCOME_MAIL');
-			$options['template'] = 'welcome_mail';
+			$options['template'] = Configure::read('Email_Templates.WELCOME');
             $options['viewVars'] = array(
 				'user' => array(
 					'first_name' => $userDetail['User']['first_name'],
@@ -175,80 +164,69 @@ class UsersController extends AppController {
  * Social media login callback [Surinder Sammy]
  */
 	public function auth_callback($provider = array()) {
+		$this->autoRender = false;
         $contact = $result = array();
 		$result = $this->ExtAuth->loginCallback($provider);
-		//$result data
-		//When come from Facebook
-		/*$result = array(
-			'success' => true,
-			'accessToken' => 'CAAIUnL5fWsEBAAcw8T6pWx2P53CrUBd3SFVPzvtpPZAvFh5ksBexuniOE5Bl6lcbeG7QSBhs5nZCUCjiRk3mYD57ZCaVjLTWziC0pgVR1ZCxgYhkyG9DwoeLcDNwjIzNrP3325BgDkQV6gfgaJ9X',
-			'profile' => array(
-				'id' => '100001185010014',
-				'name' => 'Surinder Sammy',
-				'first_name' => 'Surinder',
-				'last_name' => 'Sammy',
-				'username' => 'surinder.sammy',
-				'gender' => 'male',
-				'email' => 'sammy27july@gmail.com',
-				'locale' => 'en_US',
-				'given_name' => 'Surinder',
-				'family_name' => 'Sammy',
-				'oid' => 'https://www.facebook.com/surinder.sammy',
-				'picture' => 'https://graph.facebook.com/surinder.sammy/picture?type=large',
-				'raw' => '{"id":"100001185010014","name":"Surinder Sammy","first_name":"Surinder","last_name":"Sammy","link":"https:\/\/www.facebook.com\/surinder.sammy","username":"surinder.sammy","hometown":{"id":"106313309406070","name":"Ludhiana, Punjab, India"},"sports":[{"id":"109441309082794","name":"Kabaddi"}],"gender":"male","email":"sammy27july\u0040gmail.com","timezone":5.5,"locale":"en_US","languages":[{"id":"105606752807048","name":"Punjabi"},{"id":"112969428713061","name":"Hindi"},{"id":"106059522759137","name":"English"}],"verified":true,"updated_time":"2013-05-02T09:42:11+0000"}',
-				'provider' => 'Facebook'
-			)
-		);*/
-		//When come from google
-		/*$result = array(
-			'success' => true,
-			'accessToken' => 'ya29.AHES6ZSmvNB48ceDS5HpP9JEhnjutL8TupuSYW8ZY7mBIxM9S_M9bg',
-			'profile' => array(
-				'email' => 'sammy.mengra@gmail.com',
-				'given_name' => 'Surinder',
-				'family_name' => 'Sammy',
-				'gender' => 'male',
-				'locale' => 'en',
-				'oid' => 'https://plus.google.com/114676595476522367467',
-				'dob' => '0000-08-01',
-				'username' => 'Surinder Sammy',
-				'raw' => '{
-					 "id": "114676595476522367467",
-					 "email": "sammy.mengra@gmail.com",
-					 "verified_email": true,
-					 "name": "Surinder Sammy",
-					 "given_name": "Surinder",
-					 "family_name": "Sammy",
-					 "link": "https://plus.google.com/114676595476522367467",
-					 "gender": "male",
-					 "birthday": "0000-08-01",
-					 "locale": "en"
-				}',
-				'provider' => 'Google'
-			)
-		);*/
-		
 		if ($result['success']) {
-            
-            if ($result['profile']['provider'] == 'Facebook') {
-                $contact = $this->setFacebookData($result);
-            } else {
-                $contact = $this->setGoogleData($result);
-            }
-            
-            if ($this->User->Contact->saveAssociated($contact)) {
-                
-            } else {
-                $this->Session->setFlash(__('Request failed. Please try again.'));
-                $this->redirect($this->Auth->loginAction);
-            }
+			//$result data
+			//When come from Facebook
+			/*$result = array(
+				'success' => true,
+				'accessToken' => 'CAAIUnL5fWsEBAAcw8T6pWx2P53CrUBd3SFVPzvtpPZAvFh5ksBexuniOE5Bl6lcbeG7QSBhs5nZCUCjiRk3mYD57ZCaVjLTWziC0pgVR1ZCxgYhkyG9DwoeLcDNwjIzNrP3325BgDkQV6gfgaJ9X',
+				'profile' => array(
+					'id' => '100001185010014',
+					'name' => 'Surinder Sammy',
+					'first_name' => 'Surinder',
+					'last_name' => 'Sammy',
+					'username' => 'surinder.sammy',
+					'gender' => 'male',
+					'email' => 'sammy27july@gmail.com',
+					'locale' => 'en_US',
+					'given_name' => 'Surinder',
+					'family_name' => 'Sammy',
+					'oid' => 'https://www.facebook.com/surinder.sammy',
+					'picture' => 'https://graph.facebook.com/surinder.sammy/picture?type=large',
+					'raw' => '{"id":"100001185010014","name":"Surinder Sammy","first_name":"Surinder","last_name":"Sammy","link":"https:\/\/www.facebook.com\/surinder.sammy","username":"surinder.sammy","hometown":{"id":"106313309406070","name":"Ludhiana, Punjab, India"},"sports":[{"id":"109441309082794","name":"Kabaddi"}],"gender":"male","email":"sammy27july\u0040gmail.com","timezone":5.5,"locale":"en_US","languages":[{"id":"105606752807048","name":"Punjabi"},{"id":"112969428713061","name":"Hindi"},{"id":"106059522759137","name":"English"}],"verified":true,"updated_time":"2013-05-02T09:42:11+0000"}',
+					'provider' => 'Facebook'
+				)
+			);*/
+			//When come from google
+			/*$result = array(
+				'success' => true,
+				'accessToken' => 'ya29.AHES6ZSmvNB48ceDS5HpP9JEhnjutL8TupuSYW8ZY7mBIxM9S_M9bg',
+				'profile' => array(
+					'email' => 'sammy.mengra@gmail.com',
+					'given_name' => 'Surinder',
+					'family_name' => 'Sammy',
+					'gender' => 'male',
+					'locale' => 'en',
+					'oid' => 'https://plus.google.com/114676595476522367467',
+					'dob' => '0000-08-01',
+					'username' => 'Surinder Sammy',
+					'raw' => '{
+						 "id": "114676595476522367467",
+						 "email": "sammy.mengra@gmail.com",
+						 "verified_email": true,
+						 "name": "Surinder Sammy",
+						 "given_name": "Surinder",
+						 "family_name": "Sammy",
+						 "link": "https://plus.google.com/114676595476522367467",
+						 "gender": "male",
+						 "birthday": "0000-08-01",
+						 "locale": "en"
+					}',
+					'provider' => 'Google'
+				)
+			);*/
+		
 			$this->__successfulExtAuth($result['profile'], $result['accessToken']);
+			
 		} else {
 			$this->Session->setFlash($result['message']);
 			$this->redirect($this->Auth->loginAction);
 		}
 	}
-
+    
 /**
  * index method
  *
@@ -382,38 +360,101 @@ class UsersController extends AppController {
 
 /**
  * Save user social media data [Surinder Sammy]
+ * check user social site detail and save detail.
+ * 
+ * @author Lucky Saini
  */
 	private function __successfulExtAuth($incomingProfile, $accessToken) {
+		$contact = $response = array();
         
-		// search for social profile
-		$existingUser = $this->load_external_user($incomingProfile['oid']);
-			
-		if ($existingUser) {
-            
-			// user logged in already, attach profile to logged in user.
-			if ($this->Auth->loggedIn()) {
-				// TODO:: Update or Create user connected network data
-				// TODO:: If connect with facebook then import contacts
-			} else {
-				// log in
-				$this->__doAuthLogin($user);
-			}
+		//just for demo
+		//$incomingProfile['email'] = 'luckys383@gmail.com';
+		
+		// set data accourding to social media.
+		if ($incomingProfile['provider'] == 'Facebook') {
+			$contact = $this->setFacebookData($incomingProfile, $accessToken);
+		} else {
+			$contact = $this->setGoogleData($incomingProfile, $accessToken);
 		}
-		else{
+		
+		if (!empty($incomingProfile['email'])) {
+			// check user is already registered.
+			if ($this->User->isRegistered($incomingProfile['email'])) {
+				// user logged in already, attach profile to logged in user.
+				if ($this->Auth->loggedIn()) {
+					// TODO:: Update or Create user connected network data
+					// TODO:: If connect with facebook then import contacts
+				} else {
+					$user['User']['email'] = $contact['Contact']['email'];
+					// log in
+					$this->__doAuthLogin($user);
+				}
+			} elseif ($this->User->Contact->isSocialUserExists($incomingProfile['oid'], $incomingProfile['email'])) {
+				// is user in contact.
+				$response = $this->registerSocialUser($contact);
+				$response['Contact']['id'] = $this->User->Contact->isSocialUserExists($incomingProfile['oid'], $incomingProfile['email']);
+				$user['User'] = $response['User'];
+                
+                // set user raw data.
+                if (isset($incomingProfile['raw']) && !empty($incomingProfile['raw'])) {
+                    $user_profile_detail = SetUserSocialDetail::setFacebookUserDetail($incomingProfile['raw']);
+                    $response = array_merge($response, $user_profile_detail);
+                }
+                
+				unset($response['User']);
+				$this->User->Contact->saveAll($user_contact);
+				$this->Session->setFlash(__('Congratulations, your account is successfully completed.'));
+				$this->__doAuthLogin($user, true);
+			} else {				// user is not exists.
+				$contact = $this->registerSocialUser($contact);
+				$user['User'] = $contact['User'];
+				unset($contact['User']);
+                
+                // set user raw data.
+                if (isset($incomingProfile['raw']) && !empty($incomingProfile['raw'])) {
+                    $user_profile_detail = SetUserSocialDetail::setFacebookUserDetail($incomingProfile['raw']);
+                    $contact = array_merge($contact, $user_profile_detail);
+                }
+                
+				if($this->User->Contact->saveAll($contact)) {
+					$this->Session->setFlash(__('Congratulations, your account is successfully completed.'));
+					$this->__doAuthLogin($user, true);
+				} else {
+					$this->Session->setFlash(__('There is some error in your registration.'));
+					$this->redirect(array('controller' => 'users', 'action' => 'login'));
+				}
+			}
+		} else {
+			$this->Session->setFlash(__('Your Email id is not isset.'));
+			$this->redirect($this->Auth->loginAction);
 		}
 	}
-
+    
     private function load_external_user($oid){
-        
+        return $this->User->Contact->field('id', array('Contact.oid' => $oid));
     }
     
-	private function __doAuthLogin($user) {
+/**
+ *  do login for authorized user after connecting with social media.
+ *
+ *  @author Lucky Saini
+ *  @param array of user detail and bool of redirection.
+ **/
+	private function __doAuthLogin($user, $isRedirectToProfile = false) {
+        
 		if ($this->Auth->login($user['User'])) {
-			$user['last_login'] = date(TimeFormat::DatabaseDate);
+			$users_options['conditions']['User.email'] = $user['User']['email'];
+			$user = $this->User->getRecord($users_options);
+			$this->Session->write('Auth', $user);
+			$user['User']['last_login'] = date(TimeFormat::DatabaseDateTime);
 			$this->User->save(array('User' => $user));
             
-			$this->log($this->Auth->user('username').' logged in','info');
-			$this->redirect($this->Auth->loginRedirect);
+            $this->log($this->Auth->user('username').' logged in','info');
+            if ($isRedirectToProfile) {
+                $this->redirect(array('controller' => 'profile', 'action' => 'profile_page'));
+            } else {
+                $this->redirect($this->Auth->loginRedirect);
+            }
 		}
 	}
 
@@ -438,24 +479,25 @@ class UsersController extends AppController {
  *  @param array of data.
  *  @return array of result.
  **/
-    private function setFacebookData($data = array()) {
+    private function setFacebookData($data = array(), $accessToken) {
         //ConnectedNetwork
-        $contact['ConnectedNetwork']['0']['access_token'] = $data['accessToken'];
-        $contact['ConnectedNetwork']['0']['url'] = $data['profile']['oid'];
-        $contact['ConnectedNetwork']['0']['network_id'] = $data['profile']['id'];
-        $contact['ConnectedNetwork']['0']['provider'] = $data['profile']['provider'];
+        $contact['ConnectedNetwork']['0']['access_token'] = $accessToken;
+        $contact['ConnectedNetwork']['0']['url'] = $data['oid'];
+        $contact['ConnectedNetwork']['0']['network_id'] = $data['id'];
+        $contact['ConnectedNetwork']['0']['provider'] = $data['provider'];
         
         //contacts
-        $contact['Contact']['name'] = $data['profile']['name'];
-        $contact['Contact']['first_name'] = $data['profile']['first_name'];
-        $contact['Contact']['last_name'] = $data['profile']['last_name'];
-        $contact['Contact']['username'] = $data['profile']['username'];
-        $contact['Contact']['gender'] = $data['profile']['gender'];
-        $contact['Contact']['email'] = $data['profile']['email'];
-        $contact['Contact']['locale'] = $data['profile']['locale'];
-        $contact['Contact']['given_name'] = $data['profile']['given_name'];
-        $contact['Contact']['family_name'] = $data['profile']['family_name'];
-        $contact['Contact']['picture'] = $data['profile']['picture'];
+        $contact['Contact']['name'] = $data['name'];
+		$contact['Contact']['oid'] = $data['oid'];
+        $contact['Contact']['first_name'] = $data['first_name'];
+        $contact['Contact']['last_name'] = $data['last_name'];
+        $contact['Contact']['username'] = $data['username'];
+        $contact['Contact']['gender'] = $data['gender'];
+		$contact['Contact']['email'] = $data['email'];
+		$contact['Contact']['locale'] = $data['locale'];
+        $contact['Contact']['given_name'] = $data['given_name'];
+        $contact['Contact']['family_name'] = $data['family_name'];
+        $contact['Contact']['picture'] = $data['picture'];
         return $contact;
     }
 	
@@ -463,26 +505,83 @@ class UsersController extends AppController {
  *  set user data of google plus id.
  *
  *  @access private.
- *  @param array of data.
+ *  @param array of data and access token.
  *  @return array of result.
  **/
-    private function setGoogleData($data = array()) {
-        $result_raw = json_decode($data['profile']['raw']);
+    private function setGoogleData($data = array(), $accessToken) {
+        $result_raw = json_decode($data['raw']);
         //ConnectedNetwork
-        $contact['ConnectedNetwork']['0']['access_token'] = $data['accessToken'];
-        $contact['ConnectedNetwork']['0']['url'] = $data['profile']['oid'];
+        $contact['ConnectedNetwork']['0']['access_token'] = $accessToken;
+        $contact['ConnectedNetwork']['0']['url'] = $data['oid'];
         $contact['ConnectedNetwork']['0']['network_id'] = $result_raw->id;
-        $contact['ConnectedNetwork']['0']['provider'] = $data['profile']['provider'];
+        $contact['ConnectedNetwork']['0']['provider'] = $data['provider'];
         
         //contacts
         $contact['Contact']['name'] = $result_raw->name;
-        $contact['Contact']['username'] = $data['profile']['username'];
-        $contact['Contact']['gender'] = $data['profile']['gender'];
-        $contact['Contact']['email'] = $data['profile']['email'];
-        $contact['Contact']['locale'] = $data['profile']['locale'];
-        $contact['Contact']['given_name'] = $data['profile']['given_name'];
-        $contact['Contact']['family_name'] = $data['profile']['family_name'];
-        $contact['Contact']['dob'] = $data['profile']['dob'];
+		$contact['Contact']['oid'] = $data['oid'];
+        $contact['Contact']['username'] = $data['username'];
+        $contact['Contact']['gender'] = $data['gender'];
+        $contact['Contact']['email'] = $data['email'];
+        $contact['Contact']['locale'] = $data['locale'];
+        $contact['Contact']['given_name'] = $data['given_name'];
+        $contact['Contact']['family_name'] = $data['family_name'];
+        $contact['Contact']['dob'] = date(TimeFormat::DatabaseDate, strtotime($data['dob']));
         return $contact;
     }
+	
+	/**
+ *	function for register social user detail.
+ *	and send verification email to user to active his/her account.
+ *
+ *	@access private.
+ *	@param user detail.
+ *	@return array of user detail.
+ **/
+	private function registerSocialUser($contact) {
+		$detail = array();
+		$password = $this->User->generatePassword();
+		$detail['first_name'] = $contact['Contact']['first_name'];
+		$detail['last_name'] = $contact['Contact']['last_name'];
+		$detail['email'] = $contact['Contact']['email'];
+		$detail['group_id'] = UserGroup::User;
+		$detail['password'] = $password;
+		$user['User'] = $detail;
+		$user = $this->User->register($user, false);
+		$user['User']['password'] = $password;
+		$user['template'] = Configure::read('Email_Templates.REGITER_SOCIAL_USER');
+		$this->sendRegisterMail($user);
+		$contact['User'] = $user['User'];
+		$contact['Contact']['user_id'] = $user['User']['id'];
+		return $contact;
+	}
+	
+/**
+ *	function for send mail after successful registration process.
+ *
+ *	@access private.
+ *	@param array of user detail.
+ *	@return boolean.
+ **/
+	private function sendRegisterMail($user = array()) {
+		// SENDING ACTIVATION EMAIL
+		$options = array();
+		$options['to'] = $user['User']['email'];
+		$options['from'] = array(EMIL_FROM => TITLE);
+		$options['subject'] = Configure::read('EMAIL_SUBJECTS.REGISTER');
+		$options['template'] = $user['template'];
+		
+		$email_vars['first_name'] = $user['User']['first_name'];
+		$email_vars['last_name'] = $user['User']['last_name'];
+		$email_vars['email'] = $user['User']['email'];
+		if (isset($user['User']['password'])){
+			$email_vars['password'] = $user['User']['password'];
+		}
+		if (isset($user['User']['email_token'])) {
+			$email_vars['token'] = $user['User']['email_token'];
+		}
+		$options['viewVars'] = array(
+			'user' => $email_vars
+		);
+		return SendMail::sendEmail($options);
+	}
 }

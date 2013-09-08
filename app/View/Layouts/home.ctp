@@ -26,16 +26,23 @@
 				<div class="header_top">
 					<div class="container_16">
 						<div class="logo">
-
-							<?php 
-								$image = $this->Html->image('mengra-logo.png', array('title' => 'MENGRA','alt' => 'MENGRA'));
-
+							<?php
+								$image = $this->Timthumb->image('/img/mengra-logo.png', array('width' => 185, 'height' => 39));
+								//$image = $this->Html->image('mengra-logo.png', array('title' => 'MENGRA','alt' => 'MENGRA'));
 								echo $this->Html->link($image,array('controller'=>'users','action'=>'login'),array('escape'=>false));
 							?>
 						</div>
 						<div class="wrap_topnav">
 							<ul class="topnav_links">
-								<li>Welcome <span>John Mathew!</span></li>
+								<li>
+									<?php echo __('Welcome '); ?>
+									<span>
+										<?php
+											$conf_user =Configure::read('User.name');
+											echo __($conf_user . '!');
+										?>
+									</span>
+								</li>
 								<li class="divider">&nbsp;</li>
 								<li>
 									<a href="javascript:void();">
@@ -60,7 +67,18 @@
 											<li><a href="javascript:void();">Edit Profile</a></li>
 											<li><a href="javascript:void();">Help</a></li>
 											<li><a href="javascript:void();">Settings</a></li>
-											<li><a href="javascript:void();">Sign Out</a></li>
+											<li>
+												<?php
+													echo $this->Html->link(
+														__('Sign Out'),
+														array(
+															'controller' => 'users',
+															'action' => 'logout'
+														)
+													);
+												?>
+												<!--<a href="javascript:void();">Sign Out</a>-->
+											</li>
 										</ul>
 									</div>
 

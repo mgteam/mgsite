@@ -6,157 +6,60 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET NAMES utf8 */;
 
 
-DROP TABLE IF EXISTS connected_networks;
-CREATE TABLE connected_networks (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  contact_id int(11) NOT NULL,
-  provider varchar(255) NOT NULL,
-  network_id varchar(255) NOT NULL,
-  access_token varchar(255) NOT NULL,
-  url varchar(255) NOT NULL,
-  created datetime NOT NULL,
-  modified datetime NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+INSERT INTO connected_networks (id, contact_id, provider, network_id, access_token, url, created, modified) VALUES
+(2, 2, 'Facebook', '100002911597467', 'CAAIUnL5fWsEBAPU2e4xH2uXd93kztZAh9wreGBn0gb4cwteSfMlEAhxBwdEpctsWolm1IaNdvVStomJQOQNZBUJc8PAI7umjn8GLiI00smhFyjZA895Kpi1YzoSYaZCWv2qqWaEWNYdB52xaZALBkgdJS931n6onwNZAlM12bR9bV9SXsqflZBu', 'https://www.facebook.com/sukhjinder.kaur.144', '2013-09-04 12:39:56', '2013-09-04 12:39:56'),
+(3, 3, 'Facebook', '100001185010014', 'CAAIUnL5fWsEBACXJZBDwiiQ9VFmKsPr6eAymRVe1wUKlJTIObbeWmdxchlFdUE8hZA17vVn6IxtFWZCB4ZBMoTRZBe134dZBkNvrXhvkFZCWrIhMpeZA7bxq4ZCAgGg7oK2LybNu58C0JP5c5CIaPcdRm832ZCzvhdPdpNY9xSAea6DxawxIEWvsKJ', 'https://www.facebook.com/surinder.sammy', '2013-09-05 11:06:08', '2013-09-05 11:06:08'),
+(4, 4, 'Facebook', '100006510407451', 'CAAIUnL5fWsEBAPLuLj5uZCiCx7NhQNNhC6b2bjaPKvx4ctzJJRdw8K89a3ZCliGanOiTNul5GoZCa5HYgOmaB4UwlR9ywBdZCkkCDN0ipEDr6ZAgImtZCjhMUu1n0UNqzSveHuLjd0V6UJjCZCbWuKwtXQ7YKJetaLIZBy0TOrZCuMSZC7qPC3c8Im', 'https://www.facebook.com/gurdeep.mahi.92', '2013-09-05 12:09:53', '2013-09-05 12:09:53'),
+(5, 5, 'Facebook', '100002423475634', 'CAAIUnL5fWsEBANwXKwKGuzFZCtrZAqgJgy6OdFZBr6DjOzLxZB3S3pohhPMVo7nrXYJWNHt93CJkZBQMhdZCsDB99PRPZAaUEfUmXgo1uoU0sUuUZBUDo6HMKin7q686ZBvKMlJ4OHaZB9uoiQevs9z1fPD6XfZAQ7XOv9q3Ao8Y5IN25twujBlLCxE3ryeiodsuqIZD', 'https://www.facebook.com/luckys383', '2013-09-07 14:06:58', '2013-09-07 14:06:58');
+
+INSERT INTO contacts (id, user_id, oid, locale, provider, given_name, family_name, first_name, last_name, name, username, gender, dob, email, picture, phone, mobile, created, modified) VALUES
+(2, 4, 'https://www.facebook.com/sukhjinder.kaur.144', 'en_GB', NULL, 'Sukhjinder', 'Kaur', 'Sukhjinder', 'Kaur', 'Sukhjinder Kaur', 'sukhjinder.kaur.144', 'female', NULL, 'ksukhjinder17@gmail.com', 'https://graph.facebook.com/sukhjinder.kaur.144/picture?type=large', 0, 0, '2013-09-04 12:39:56', '2013-09-04 12:39:56'),
+(3, 5, 'https://www.facebook.com/surinder.sammy', 'en_US', NULL, 'Surinder', 'Sammy', 'Surinder', 'Sammy', 'Surinder Sammy', 'surinder.sammy', 'male', NULL, 'sammy27july@gmail.com', 'https://graph.facebook.com/surinder.sammy/picture?type=large', 0, 0, '2013-09-05 11:06:08', '2013-09-05 11:06:08'),
+(4, 6, 'https://www.facebook.com/gurdeep.mahi.92', 'en_GB', NULL, 'Gurdeep', 'Mahi', 'Gurdeep', 'Mahi', 'Gurdeep Mahi', 'gurdeep.mahi.92', 'male', NULL, 'gurdeepmahi24@gmail.com', 'https://graph.facebook.com/gurdeep.mahi.92/picture?type=large', 0, 0, '2013-09-05 12:09:53', '2013-09-05 12:09:53'),
+(5, 7, 'https://www.facebook.com/luckys383', 'en_US', NULL, 'Luckyl', 'Saini', 'Luckyl', 'Saini', 'Luckyl Saini', 'luckys383', 'male', '1988-10-23', 'luckys383@gmail.com', 'https://graph.facebook.com/luckys383/picture?type=large', 0, 0, '2013-09-07 14:06:58', '2013-09-07 14:06:58');
 
 
-DROP TABLE IF EXISTS contacts;
-CREATE TABLE contacts (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  user_id int(11) NOT NULL,
-  oid varchar(255) DEFAULT NULL,
-  locale varchar(255) DEFAULT NULL,
-  provider varchar(255) DEFAULT NULL,
-  given_name varchar(255) DEFAULT NULL,
-  family_name varchar(255) DEFAULT NULL,
-  first_name varchar(255) NOT NULL,
-  last_name varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  username varchar(255) NOT NULL,
-  gender varchar(50) NOT NULL,
-  dob date DEFAULT NULL,
-  email varchar(255) NOT NULL,
-  picture varchar(255) NOT NULL,
-  phone bigint(20) NOT NULL,
-  mobile bigint(20) NOT NULL,
-  created datetime NOT NULL,
-  modified datetime NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE KEY email (email)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
-
-DROP TABLE IF EXISTS countries;
-CREATE TABLE countries (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `code` varchar(20) DEFAULT NULL,
-  is_active tinyint(1) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS groups;
-CREATE TABLE groups (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  is_active tinyint(1) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+INSERT INTO educations (id, contact_id, city, university, start_date, end_date, is_studying, class, created, modified) VALUES
+(1, 5, '', 'Guru Gobind Singh Senior Secondar School', '0000-00-00', '0000-00-00', 1, '', '2013-09-07 14:06:58', '2013-09-07 14:06:58'),
+(2, 5, '', 'Jeewan model high school', '0000-00-00', '0000-00-00', 1, '', '2013-09-07 14:06:58', '2013-09-07 14:06:58'),
+(3, 5, '', 'Punjab Technical University (PTU)', '0000-00-00', '0000-00-00', 1, 'MCA', '2013-09-07 14:06:58', '2013-09-07 14:06:58');
 
 INSERT INTO groups (id, name, is_active) VALUES
 (3, 'Super Admin', 1),
 (4, 'User', 1);
 
-DROP TABLE IF EXISTS login_histories;
-CREATE TABLE login_histories (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  user_id int(11) NOT NULL,
-  session_id varchar(100) NOT NULL,
-  log_in_datetime datetime NOT NULL,
-  log_out_datetime datetime DEFAULT NULL,
-  ip varchar(50) NOT NULL,
-  country varchar(50) NOT NULL,
-  city varchar(50) NOT NULL,
-  state varchar(100) DEFAULT NULL,
-  latitude double DEFAULT NULL,
-  longitude double DEFAULT NULL,
-  zip_code varchar(50) DEFAULT NULL,
-  PRIMARY KEY (id)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+INSERT INTO languages (id, contact_id, title, created, modified) VALUES
+(1, 5, 'Punjabi', '2013-09-07 14:06:58', '2013-09-07 14:06:58'),
+(2, 5, 'English', '2013-09-07 14:06:58', '2013-09-07 14:06:58'),
+(3, 5, 'Hindi', '2013-09-07 14:06:58', '2013-09-07 14:06:58');
 
 INSERT INTO login_histories (id, user_id, session_id, log_in_datetime, log_out_datetime, ip, country, city, state, latitude, longitude, zip_code) VALUES
-(1, 1, '3fl81cfg0o62so5t0mjqbdub03', '2013-08-16 16:11:53', '2013-08-16 16:13:27', '', '', '', NULL, NULL, NULL, NULL),
-(2, 1, '2hsjfhaf1hkipsvv0hjiaaic37', '2013-08-16 16:13:58', '2013-08-16 16:14:09', '', '', '', NULL, NULL, NULL, NULL),
-(3, 1, 'gapea9keiat87poch3m9qmleo0', '0000-00-00 00:00:00', '2013-08-16 16:17:49', '127.0.0.1', '', '', NULL, NULL, NULL, NULL),
-(4, 1, 'ocf0c0tdqs4p33bvrr155eok77', '2013-08-16 16:32:48', '2013-08-16 16:33:11', '127.0.0.1', '', 'city', 'state', 1.325575452, 1.4644416456, 'AABBCC');
-
-DROP TABLE IF EXISTS social_media;
-CREATE TABLE social_media (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  contact_id int(11) NOT NULL,
-  provider varchar(255) NOT NULL,
-  network_id varchar(255) NOT NULL,
-  access_id varchar(255) NOT NULL,
-  url varchar(255) NOT NULL,
-  created int(11) NOT NULL,
-  modified int(11) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+(1, 1, '97082867077f2c3c6dc0e28e79d167f6', '0000-00-00 00:00:00', '2013-09-07 13:53:15', '', '', '', NULL, NULL, NULL, NULL),
+(2, 1, '4d5ec6fb7608614c6441998756e2b75d', '0000-00-00 00:00:00', '2013-09-07 14:05:11', '', '', '', NULL, NULL, NULL, NULL),
+(3, 7, 'nj22t3lafcn0ljc017dshkepo1', '2013-09-07 18:12:34', '2013-09-07 18:12:59', '127.0.0.1', '', 'city', 'state', 1.325575452, 1.4644416456, 'AABBCC'),
+(4, 7, '8k6hsfe0ut0166qam67l7i91e6', '2013-09-07 18:14:13', '2013-09-07 18:14:24', '127.0.0.1', '', 'city', 'state', 1.325575452, 1.4644416456, 'AABBCC'),
+(5, 7, 'op8i33ef051a89hrcti9f96793', '2013-09-07 18:14:49', '2013-09-08 10:11:22', '127.0.0.1', '', 'city', 'state', 1.325575452, 1.4644416456, 'AABBCC'),
+(6, 7, '7cgjkmrvuf88a6t16vstg7f1o0', '2013-09-08 10:11:22', NULL, '127.0.0.1', '', 'city', 'state', 1.325575452, 1.4644416456, 'AABBCC');
 
 
-DROP TABLE IF EXISTS users;
-CREATE TABLE users (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  group_id int(11) NOT NULL,
-  first_name varchar(255) NOT NULL,
-  last_name varchar(255) NOT NULL,
-  `password` varchar(128) DEFAULT NULL,
-  password_token varchar(128) DEFAULT NULL,
-  email varchar(255) DEFAULT NULL,
-  email_verified tinyint(1) DEFAULT '0',
-  email_token varchar(255) DEFAULT NULL,
-  email_token_expires datetime DEFAULT NULL,
-  tos tinyint(1) DEFAULT '0',
-  archived_date datetime NOT NULL,
-  is_archived tinyint(1) DEFAULT '0',
-  is_active tinyint(1) DEFAULT '0',
-  last_login datetime DEFAULT NULL,
-  created datetime DEFAULT NULL,
-  modified datetime DEFAULT NULL,
-  is_deleted tinyint(1) DEFAULT '0',
-  deleted_on datetime DEFAULT NULL,
-  PRIMARY KEY (id),
-  KEY BY_USERNAME (first_name),
-  KEY BY_EMAIL (email)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+INSERT INTO users (id, group_id, first_name, last_name, password, password_token, email, email_verified, email_token, email_token_expires, tos, archived_date, is_archived, is_active, last_login, created, modified, is_deleted, deleted_on) VALUES
+(1, 1, 'Super', 'Admin', '466a9ac8af0a547eda14b4e0afbbbf242f123fc8', NULL, 'madmin@mengra.com', 1, NULL, NULL, 1, '0000-00-00 00:00:00', 0, 1, '2013-08-31 06:20:30', '2013-07-15 22:50:07', '2013-08-31 06:20:30', 0, NULL),
+(2, 2, 'First Name', 'Last Name', '5940bb9520332787775c35745d0272b7f7c5307a', NULL, 'testdata987@gmail.com', 1, NULL, NULL, 0, '0000-00-00 00:00:00', 0, 1, NULL, '2013-08-12 14:45:35', '2013-08-12 15:32:42', 0, NULL),
+(4, 2, 'Sukhjinder', 'Kaur', 'a994708b784ec08ebbd6dc0eb23ade3270494510', NULL, 'ksukhjinder17@gmail.com', 1, NULL, NULL, 0, '0000-00-00 00:00:00', 0, 1, NULL, '2013-09-04 12:39:47', '2013-09-04 12:39:47', 0, NULL),
+(5, 2, 'Surinder', 'Sammy', '9eee404e4c8dad2fa38aa5b5709121696e904559', NULL, 'sammy27july@gmail.com', 1, NULL, NULL, 0, '0000-00-00 00:00:00', 0, 1, NULL, '2013-09-05 11:06:04', '2013-09-05 11:06:04', 0, NULL),
+(6, 2, 'Gurdeep', 'Mahi', 'd5a5e77921abcdcd9eed05133b574d82124158ff', NULL, 'gurdeepmahi24@gmail.com', 1, NULL, NULL, 0, '0000-00-00 00:00:00', 0, 1, NULL, '2013-09-05 12:09:53', '2013-09-05 12:09:53', 0, NULL),
+(7, 2, 'Luckyl', 'Saini', '5940bb9520332787775c35745d0272b7f7c5307a', NULL, 'luckys383@gmail.com', 1, NULL, NULL, 0, '0000-00-00 00:00:00', 0, 1, '2013-09-08 10:11:22', '2013-09-07 14:06:57', '2013-09-08 10:11:22', 0, NULL);
 
-INSERT INTO users (id, group_id, first_name, last_name, password, password_token, email, email_verified, email_token, email_token_expires, tos, archived_date, is_archived, is_active, last_login, created, modified) VALUES
-(1, 1, 'Super', 'Admin', '466a9ac8af0a547eda14b4e0afbbbf242f123fc8', NULL, 'madmin@mengra.com', 1, NULL, NULL, 1, '0000-00-00 00:00:00', 0, 1, '2013-08-16 16:32:48', '2013-07-15 22:50:07', '2013-08-16 16:32:48'),
-(2, 2, 'First Name', 'Last Name', '5940bb9520332787775c35745d0272b7f7c5307a', NULL, 'testdata987@gmail.com', 1, NULL, NULL, 0, '0000-00-00 00:00:00', 0, 1, NULL, '2013-08-12 14:45:35', '2013-08-12 15:32:42'),
-(3, 2, 'testdata', 'data', '5940bb9520332787775c35745d0272b7f7c5307a', NULL, 'testdata777@gmail.com', 0, '2chnowezlv', '2013-08-13 15:37:41', 0, '0000-00-00 00:00:00', 0, 1, NULL, '2013-08-12 15:37:41', '2013-08-12 15:37:41');
-
-DROP TABLE IF EXISTS users_contacts;
-CREATE TABLE users_contacts (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  user_id int(11) NOT NULL,
-  contact_id int(11) NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
-
-DROP TABLE IF EXISTS user_profiles;
-CREATE TABLE user_profiles (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  user_id int(11) NOT NULL,
-  mobile_no bigint(20) NOT NULL,
-  created datetime NOT NULL,
-  modified datetime NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
 
 INSERT INTO user_profiles (id, user_id, mobile_no, created, modified) VALUES
 (1, 1, 9944115544, '2013-07-15 22:51:28', '2013-07-15 22:51:28');
+
+INSERT INTO works (id, contact_id, employer, position, city, description, start_date, end_date, is_currently_working, created, modified) VALUES
+(1, 5, 'Logiciel Solutions', 'Web Developer', '', '', '2011-10-01', '0000-00-00', 0, '2013-09-07 14:06:58', '2013-09-07 14:06:58'),
+(2, 5, 'Kapoor nursing home', 'Doctor asistent', '', 'I worked as a Asistent of doctor', '2006-01-01', '2008-12-31', 0, '2013-09-07 14:06:58', '2013-09-07 14:06:58'),
+(3, 5, 'The Art of Living', '', '', '', '0000-00-00', '0000-00-00', 0, '2013-09-07 14:06:58', '2013-09-07 14:06:58'),
+(4, 5, 'Student', '', '', '', '0000-00-00', '0000-00-00', 0, '2013-09-07 14:06:58', '2013-09-07 14:06:58');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

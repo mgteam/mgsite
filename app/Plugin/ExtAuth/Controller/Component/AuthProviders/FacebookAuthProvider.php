@@ -15,6 +15,7 @@ class FacebookAuthProvider extends AbstractAuthProvider {
 			'client_id'         => $this->key,
 			'redirect_uri'      => '{CALLBACK_URL}',
 			//'state'           => '{STATE}',
+			'scope'		=> 'email',
 		);
 
 		$this->accessTokenURL           = 'https://graph.facebook.com/oauth/access_token';

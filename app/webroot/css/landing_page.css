@@ -94,9 +94,9 @@ html,body{
 #form-login .login-left-area ul{list-style-type:none;}
 #form-login .login-left-area ul li{width:162px; margin:7px 0; padding:10px 30px;}
 #form-login .login-left-area ul li a{background: none repeat scroll 0 0 transparent; float: left; padding-left: 20px; text-align: left; text-decoration: none; width: 96%;}
-#form-login .login-left-area ul li.facebook{background:url("../img/images/facebook.png") no-repeat scroll 7px 3px / 15% auto, linear-gradient(to bottom, #FAFAFA 0%, #E1E1E1 100%) repeat-x scroll 0 0 / 100% 100% transparent;}
+#form-login .login-left-area ul li.facebook{background:url("../img/images/Facebook.png") no-repeat scroll 7px 3px / 15% auto, linear-gradient(to bottom, #FAFAFA 0%, #E1E1E1 100%) repeat-x scroll 0 0 / 100% 100% transparent;}
 #form-login .login-left-area ul li.facebook a{ color:#385696;}
-#form-login .login-left-area ul li.googleplus{background:url("../img/images/Google.png") no-repeat scroll 7px 3px / 15% auto, linear-gradient(to bottom, #FAFAFA 0%, #E1E1E1 100%) repeat-x scroll 0 0 / 100% 100% transparent;}
+#form-login .login-left-area ul li.googleplus{background:url("../img/images/google.png") no-repeat scroll 7px 3px / 15% auto, linear-gradient(to bottom, #FAFAFA 0%, #E1E1E1 100%) repeat-x scroll 0 0 / 100% 100% transparent;}
 #form-login .login-left-area ul li.googleplus a{color:#D04333;}
 #form-login .login-left-area ul li.twitter{background:url("../img/images/Twitter.png") no-repeat scroll 7px 3px / 15% auto, linear-gradient(to bottom, #FAFAFA 0%, #E1E1E1 100%) repeat-x scroll 0 0 / 100% 100% transparent;}
 #form-login .login-left-area ul li.twitter a{color:#00ABEC;}

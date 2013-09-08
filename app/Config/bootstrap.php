@@ -124,6 +124,7 @@ CakeLog::config('error', array(
 require_once('site_constants.php');
 
 CakePlugin::load('Madmin', array('bootstrap' => true, 'routes' => true));
+CakePlugin::load('Timthumb', array('routes' => true, 'bootstrap' => true));
 
 /**
  * Load Validation Messages Configuration Files
@@ -134,3 +135,4 @@ Configure::load('site_configuration');
 App::uses('SendMail', 'Lib');
 App::uses('UserSystemInfo', 'Lib');
 App::uses('GeneratePassword', 'Lib');
+App::uses('DateTimeLib', 'Lib');

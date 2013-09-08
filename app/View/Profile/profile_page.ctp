@@ -1,17 +1,39 @@
 <div class="user_profile">
 	<div class="profile_img">
 		<div>
-			<?php echo $this->Html->image(ImagePath::ProfileImgPath.'profile_img.jpg', array('title' => 'Profile Picture','alt' => 'Pic')); ?>
+			<?php
+				echo $this->Timthumb->image(ImagePath::ProfileImgPath.'profile_img.jpg', array('width' => 150, 'height' => 150));
+				//echo $this->Html->image(ImagePath::ProfileImgPath.'profile_img.jpg', array('title' => 'Profile Picture','alt' => 'Pic'));
+			?>
 		</div>
 		<div><a href="javascript:void();">Change Face</a></div>
 	</div>
 	<div class="profile_info">
-		<h1>John Mathew <span>Male, Florida, USA / Mood Information Technology and Services</span></h1>
+		<h1>
+			<?php echo __($user['User']['name']);?>
+			<span style='text-transform: capitalize;'>
+				<?php
+					if(!empty($user['Contact']['gender'])) {
+						echo __($user['Contact']['gender'] . ',');
+					}
+				?> Florida, USA / Mood Information Technology and Services</span></h1>
 		<div class="user_info">
-			<div class="label">Birthday</div>
-			<div class="info">October 16</div>
+			<?php if(!empty($user['Contact']['dob'])): ?>
+				<div class="label">Birthday</div>
+				<div class="info">
+					<?php echo __(DateTimeLib::setFormat($user['Contact']['dob'], TimeFormat::DayMonth)); ?>
+				</div>
+			<?php endif; ?>
 			<div class="label">Education</div>
-			<div class="info">MBA, Human Resources Management</div>
+			<div class="info">
+				<?php 
+					if (is_array($user['Education'])){
+						foreach($user['Education'] as $user_education) {
+							echo __($user_education['university']. ', ');
+						}
+					}
+				?>
+			</div>
 			<div class="label">About</div>
 			<div class="info">I define myself as a self-starter, an innovator, venturesome, willing to take waves, take responsibility for the risks, persuasive and drive the change. I play to WIN...</div>
 			<div class="clear"></div>

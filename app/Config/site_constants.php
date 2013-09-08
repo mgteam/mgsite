@@ -10,13 +10,15 @@
     }
     
     class TimeFormat{
-        const DateTime 			= 'd-m-Y H:i:s A';
+        const DateTime 			= 'd-m-Y H:i:s';
 		const CustomDateTime 	= 'd M Y, g:i A';
         const Date 				= 'd-m-Y';
         const Time 				= 'H:i:s';
 		const MeridiemTime 		= 'g:i A';
 		const CustomDate 		= 'd M Y';
-		const DatabaseDate 		= 'Y-m-d H:i:s';
+		const DatabaseDateTime	= 'Y-m-d H:i:s';
+		const DatabaseDate		= 'Y-m-d';
+		const DayMonth			= 'F jS';
     }
 	
 	class Layouts{
@@ -24,9 +26,9 @@
     }
 	
 	class ImagePath{
-        const ContactCardImgPath	= 'contacts_images/';
-        const ProfileImgPath		= 'profile_images/';
-        const ProfilePageImgPath	= 'profile_images/profile_pics/';
-        const UserPlaceholderImage	= 'images/';
+        const ContactCardImgPath	= '/img/contacts_images/';
+        const ProfileImgPath		= '/img/profile_images/';
+        const ProfilePageImgPath	= '/img/profile_images/profile_pics/';
+        const UserPlaceholderImage	= '/img/images/';
     }
 ?>
