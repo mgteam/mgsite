@@ -1,6 +1,72 @@
 <?php
 class SetUserSocialDetail {
     
+/**
+ *  set user data of facebook id.
+ *
+ *  @access private.
+ *  @param array of data.
+ *  @return array of result.
+ **/
+    private function setFacebookData($data = array(), $accessToken) {
+		//ConnectedNetwork
+        $contact['ConnectedNetwork']['0']['access_token'] = $accessToken;
+        $contact['ConnectedNetwork']['0']['url'] = $data['oid'];
+        $contact['ConnectedNetwork']['0']['network_id'] = $data['id'];
+        $contact['ConnectedNetwork']['0']['provider'] = $data['provider'];
+        
+        //contacts
+        $contact['Contact']['name'] = $data['name'];
+		$contact['Contact']['oid'] = $data['oid'];
+        $contact['Contact']['first_name'] = $data['first_name'];
+        $contact['Contact']['last_name'] = $data['last_name'];
+        $contact['Contact']['username'] = $data['username'];
+        $contact['Contact']['gender'] = $data['gender'];
+		$contact['Contact']['email'] = $data['email'];
+		$contact['Contact']['locale'] = $data['locale'];
+        $contact['Contact']['given_name'] = $data['given_name'];
+        $contact['Contact']['family_name'] = $data['family_name'];
+        $contact['Contact']['picture'] = $data['picture'];
+		$contact['Contact']['address'] = SetUserSocialDetail::getLocation($data['raw']);
+		$contact['Contact']['about'] = SetUserSocialDetail::getAbout($data['raw']);
+        return $contact;
+    }
+    
+/**
+ *  set user data of google plus id.
+ *
+ *  @access private.
+ *  @param array of data and access token.
+ *  @return array of result.
+ **/
+    private function setGoogleData($data = array(), $accessToken) {
+        $result_raw = json_decode($data['raw']);
+        //ConnectedNetwork
+        $contact['ConnectedNetwork']['0']['access_token'] = $accessToken;
+        $contact['ConnectedNetwork']['0']['url'] = $data['oid'];
+        $contact['ConnectedNetwork']['0']['network_id'] = $result_raw->id;
+        $contact['ConnectedNetwork']['0']['provider'] = $data['provider'];
+        
+        //contacts
+        $contact['Contact']['name'] = $result_raw->name;
+		$contact['Contact']['oid'] = $data['oid'];
+        $contact['Contact']['username'] = $data['username'];
+        $contact['Contact']['gender'] = $data['gender'];
+        $contact['Contact']['email'] = $data['email'];
+        $contact['Contact']['locale'] = $data['locale'];
+        $contact['Contact']['given_name'] = $data['given_name'];
+        $contact['Contact']['family_name'] = $data['family_name'];
+        $contact['Contact']['dob'] = date(TimeFormat::DatabaseDate, strtotime($data['dob']));
+        return $contact;
+    }
+    
+/**
+ *  set user contact detail.
+ *
+ *  @author Lucky Saini.
+ *  @param json format raw data.
+ *  @return array of contact detail.
+ **/
     public function setFacebookUserDetail($raw_data = null) {
         $detail = array();
         if(!empty($raw_data)) {
@@ -118,6 +184,7 @@ class SetUserSocialDetail {
     
 /**
  *  get gender of user.
+ *  @author Lucky Saini.
  **/
     public function getGender($raw_data = array()) {
         $gender = isset($raw_data->gender) ? $raw_data->gender : 0;
@@ -126,10 +193,44 @@ class SetUserSocialDetail {
     
 /**
  *  get email id of user.
+ *
+ *  @author Lucky Saini.
  **/
     public function getEmail($raw_data = array()) {
         $email = isset($raw_data->email) ? $raw_data->email : null;
         return $email;
+    }
+    
+/**
+ *  get location of user from raw data.
+ *
+ *  @author Lucky Saini.
+ *  @param json format data.
+ *  @return location address.
+ **/
+    public function getLocation($json_raw_data = array()){
+        $location = null;
+        $raw_data = json_decode($json_raw_data);
+        if (isset($raw_data->location->name) && !empty($raw_data->location->name)) {
+            $location = $raw_data->location->name;
+        }
+        return $location;
+    }
+    
+/**
+ *  get quotes or about info of user from raw data.
+ *
+ *  @author Lucky Saini.
+ *  @param json format data.
+ *  @return user about.
+ **/
+    public function getAbout($json_raw_data = array()){
+        $about = null;
+        $raw_data = json_decode($json_raw_data);
+        if (isset($raw_data->quotes) && !empty($raw_data->quotes)) {
+            $about = $raw_data->quotes;
+        }
+        return $about;
     }
     
 /**

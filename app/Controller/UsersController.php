@@ -372,15 +372,16 @@ class UsersController extends AppController {
 		
 		// set data accourding to social media.
 		if ($incomingProfile['provider'] == 'Facebook') {
-			$contact = $this->setFacebookData($incomingProfile, $accessToken);
+			$contact = SetUserSocialDetail::setFacebookData($incomingProfile, $accessToken);
 		} else {
-			$contact = $this->setGoogleData($incomingProfile, $accessToken);
+			$contact = SetUserSocialDetail::setGoogleData($incomingProfile, $accessToken);
 		}
 		
 		if (!empty($incomingProfile['email'])) {
 			// check user is already registered.
 			if ($this->User->isRegistered($incomingProfile['email'])) {
-				// user logged in already, attach profile to logged in user.
+                
+                // user logged in already, attach profile to logged in user.
 				if ($this->Auth->loggedIn()) {
 					// TODO:: Update or Create user connected network data
 					// TODO:: If connect with facebook then import contacts
@@ -406,30 +407,40 @@ class UsersController extends AppController {
 				$this->Session->setFlash(__('Congratulations, your account is successfully completed.'));
 				$this->__doAuthLogin($user, true);
 			} else {				// user is not exists.
-				$contact = $this->registerSocialUser($contact);
-				$user['User'] = $contact['User'];
-				unset($contact['User']);
-                
-                // set user raw data.
-                if (isset($incomingProfile['raw']) && !empty($incomingProfile['raw'])) {
-                    $user_profile_detail = SetUserSocialDetail::setFacebookUserDetail($incomingProfile['raw']);
-                    $contact = array_merge($contact, $user_profile_detail);
-                }
-                
-				if($this->User->Contact->saveAll($contact)) {
-					$this->Session->setFlash(__('Congratulations, your account is successfully completed.'));
-					$this->__doAuthLogin($user, true);
-				} else {
-					$this->Session->setFlash(__('There is some error in your registration.'));
-					$this->redirect(array('controller' => 'users', 'action' => 'login'));
-				}
+				$this->registerNewSocialUser($contact, $incomingProfile);
 			}
 		} else {
 			$this->Session->setFlash(__('Your Email id is not isset.'));
 			$this->redirect($this->Auth->loginAction);
 		}
 	}
-    
+
+/**
+ *	perform action of save new social user.
+ *	
+ *	@author Lucky Saini.
+ *	@param array of user contact detail and array of user social profile.
+ *	@return false.
+ **/
+	private function registerNewSocialUser($contact = array(), $incomingProfile = array()) {
+		$contact = $this->registerSocialUser($contact);
+		$user['User'] = $contact['User'];
+		unset($contact['User']);
+		
+		// set user raw data.
+		if (isset($incomingProfile['raw']) && !empty($incomingProfile['raw'])) {
+			$user_profile_detail = SetUserSocialDetail::setFacebookUserDetail($incomingProfile['raw']);
+			$contact = array_merge($contact, $user_profile_detail);
+		}
+		
+		if($this->User->Contact->saveAll($contact)) {
+			$this->Session->setFlash(__('Congratulations, your account is successfully completed.'));
+			$this->__doAuthLogin($user, true);
+		} else {
+			$this->Session->setFlash(__('There is some error in your registration.'));
+			$this->redirect(array('controller' => 'users', 'action' => 'login'));
+		}
+	}
     private function load_external_user($oid){
         return $this->User->Contact->field('id', array('Contact.oid' => $oid));
     }
@@ -471,64 +482,7 @@ class UsersController extends AppController {
 		$session_id = $this->Session->id();
 		$this->LoginHistory->saveHistory($session_id, $userId, $isLogin);
 	}
-    
-/**
- *  set user data of facebook id.
- *
- *  @access private.
- *  @param array of data.
- *  @return array of result.
- **/
-    private function setFacebookData($data = array(), $accessToken) {
-        //ConnectedNetwork
-        $contact['ConnectedNetwork']['0']['access_token'] = $accessToken;
-        $contact['ConnectedNetwork']['0']['url'] = $data['oid'];
-        $contact['ConnectedNetwork']['0']['network_id'] = $data['id'];
-        $contact['ConnectedNetwork']['0']['provider'] = $data['provider'];
-        
-        //contacts
-        $contact['Contact']['name'] = $data['name'];
-		$contact['Contact']['oid'] = $data['oid'];
-        $contact['Contact']['first_name'] = $data['first_name'];
-        $contact['Contact']['last_name'] = $data['last_name'];
-        $contact['Contact']['username'] = $data['username'];
-        $contact['Contact']['gender'] = $data['gender'];
-		$contact['Contact']['email'] = $data['email'];
-		$contact['Contact']['locale'] = $data['locale'];
-        $contact['Contact']['given_name'] = $data['given_name'];
-        $contact['Contact']['family_name'] = $data['family_name'];
-        $contact['Contact']['picture'] = $data['picture'];
-        return $contact;
-    }
-	
-/**
- *  set user data of google plus id.
- *
- *  @access private.
- *  @param array of data and access token.
- *  @return array of result.
- **/
-    private function setGoogleData($data = array(), $accessToken) {
-        $result_raw = json_decode($data['raw']);
-        //ConnectedNetwork
-        $contact['ConnectedNetwork']['0']['access_token'] = $accessToken;
-        $contact['ConnectedNetwork']['0']['url'] = $data['oid'];
-        $contact['ConnectedNetwork']['0']['network_id'] = $result_raw->id;
-        $contact['ConnectedNetwork']['0']['provider'] = $data['provider'];
-        
-        //contacts
-        $contact['Contact']['name'] = $result_raw->name;
-		$contact['Contact']['oid'] = $data['oid'];
-        $contact['Contact']['username'] = $data['username'];
-        $contact['Contact']['gender'] = $data['gender'];
-        $contact['Contact']['email'] = $data['email'];
-        $contact['Contact']['locale'] = $data['locale'];
-        $contact['Contact']['given_name'] = $data['given_name'];
-        $contact['Contact']['family_name'] = $data['family_name'];
-        $contact['Contact']['dob'] = date(TimeFormat::DatabaseDate, strtotime($data['dob']));
-        return $contact;
-    }
-	
+
 	/**
  *	function for register social user detail.
  *	and send verification email to user to active his/her account.

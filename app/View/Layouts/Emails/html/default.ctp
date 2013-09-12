@@ -156,7 +156,7 @@
 			<?php echo __('Thanks'); ?>, <br/>
 			<?php echo __('Webmaster'); ?> <br/>
 			<?php
-				$url = $this->Html->url(array('plugin' => false,'controller' => 'users','action' => 'login'),true);
+				$url = $this->Html->url('/',true);
 				echo $this->Html->link(
 					$url,
 					$url

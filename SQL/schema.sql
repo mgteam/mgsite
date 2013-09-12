@@ -37,6 +37,8 @@ CREATE TABLE contacts (
   email varchar(255) NOT NULL,
   picture varchar(255) NOT NULL,
   phone bigint(20) NOT NULL,
+  address text,
+  about text,
   mobile bigint(20) NOT NULL,
   created datetime NOT NULL,
   modified datetime NOT NULL,
