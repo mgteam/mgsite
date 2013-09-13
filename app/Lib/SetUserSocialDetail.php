@@ -4,11 +4,12 @@ class SetUserSocialDetail {
 /**
  *  set user data of facebook id.
  *
- *  @access private.
+ *  @author Lucky Saini.
+ *  @access public.
  *  @param array of data.
  *  @return array of result.
  **/
-    private function setFacebookData($data = array(), $accessToken) {
+    public function setFacebookData($data = array(), $accessToken) {
 		//ConnectedNetwork
         $contact['ConnectedNetwork']['0']['access_token'] = $accessToken;
         $contact['ConnectedNetwork']['0']['url'] = $data['oid'];
@@ -35,11 +36,12 @@ class SetUserSocialDetail {
 /**
  *  set user data of google plus id.
  *
- *  @access private.
+ *  @author Lucky Saini.
+ *  @access public.
  *  @param array of data and access token.
  *  @return array of result.
  **/
-    private function setGoogleData($data = array(), $accessToken) {
+    public function setGoogleData($data = array(), $accessToken) {
         $result_raw = json_decode($data['raw']);
         //ConnectedNetwork
         $contact['ConnectedNetwork']['0']['access_token'] = $accessToken;
