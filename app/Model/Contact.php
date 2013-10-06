@@ -245,4 +245,19 @@ class Contact extends AppModel {
 			)
 		);
     }
+    
+/**
+ *  get contact id.
+ *
+ *  @author Lucky Saini.
+ *  @access public.
+ *  @param string email id.
+ *  @return integer contact id.
+ **/
+    public function getContactId($email = null) {
+        if(!$email) {
+            return false;
+        }
+        return $this->field('id', array('Contact.email' => $email));
+    }
 }

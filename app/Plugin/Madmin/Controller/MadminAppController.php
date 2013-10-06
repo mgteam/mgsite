@@ -7,8 +7,17 @@ class MadminAppController extends AppController {
  *
  * @var array
  */
-	
 	public $helpers = array(
+		'Html',
+		'Form',
+		'TB' => array(
+			'className' => 'TwitterBootstrap.TwitterBootstrap'
+		),
+		'Session',
+		'Paginator' => array(
+			'className' => 'Madmin.BootstrapPaginator'
+		),
+		'Madmin.Admin',
 		'Madmin.Cdn',
 	);
 	//public $helpers = array('Madmin.Status',
@@ -38,26 +47,70 @@ class MadminAppController extends AppController {
 		'Session',
 		'Cookie',
 		'Search.Prg',
-		'CsvView.CsvView'
-		//'Madmin.FilterRecallComponent'
+		'Paginator',
+		'CsvView.CsvView',
+		'Madmin.Site',
 	);
 
+/**
+ * variables to be used in views to make necessary admin panel calls
+ */
+	public $sidebarElements = array(
+		'index' => array(
+			'filters' => array(
+				'filterRequestAction' => array('action' => 'index_filters')
+			)
+		),
+		'add' => array(
+		),
+		'edit' => array(
+		),
+		'default' => array(
+			'quick_links' => array(
+				'quickLinkRequestAction' => array('action' => 'quick_links')
+			),
+		)
+	);
+	
+/**
+ *	set Auth actions.
+ *	set user information in configuration if user is logged in.
+ *	call function which set pagination limit.
+ *	
+ *	@return void.
+ */
 	public function beforeFilter(){
 		parent::beforeFilter();
 		$userInfo = array();
 		if($this->Auth->user('id')){
 			$userInfo['User'] = $this->Auth->user();
+			$userInfo['User']['name'] = $userInfo['User']['first_name'] . ' ' . $userInfo['User']['last_name'];
 			Configure::write($userInfo);
 		}
 		$this->Auth->logoutRedirect = array('plugin' => 'madmin', 'controller' => 'users', 'action' => 'login');
 		$this->Auth->loginAction = array('plugin' => 'madmin', 'controller' => 'users', 'action' => 'login');
 		$this->Auth->loginRedirect  = array('plugin' => 'madmin', 'controller' => 'users', 'action' => 'index');
 		$this->Auth->allow(
-			'madmin.login', 'madmin.add'
+			'madmin.login'
 		);
 		$this->set(compact('userInfo'));
+		
+		$this->layout = 'default';
+		
+		// call functions
+		$this->setPageLimit();
 	}	
 
+/**
+ * the beforeRender callback
+ */
+	public function beforeRender() {
+		if (!$this->request->is('requested') 
+			&& !$this->request->is('ajax')) {
+			$this->set('sidebarElements', $this->sidebarElements);
+		}
+	}
+	
 /**
  *	Admin toggle status.
  **/
@@ -79,5 +132,30 @@ class MadminAppController extends AppController {
 	public function export(){
 		
 
+	}
+	
+	/************************************ Private function ***************************/
+/**
+ *	set pagination limit to paginator.
+ *	if user change the pagination limit then save value to session 
+ *	and set new pagination limit.
+ *
+ *	@access private.
+ *	@return void.
+ */
+	private function setPageLimit(){
+		$page_limit = null;
+
+		// set limit value to session.
+		if (isset($this->request->params['named']['limit']) && !empty($this->request->params['named']['limit'])) {
+			$this->Session->write('page_limit', $this->request->params['named']['limit']);
+		}
+
+		// check and get page limit value form session.
+		if ($this->Session->check('page_limit')) {
+			$page_limit = $this->Session->read('page_limit');
+		}
+
+		$this->Paginator->settings['limit'] = (!empty($page_limit)) ? $page_limit : ADMIN_PAGE_LIMIT;
 	}
 }

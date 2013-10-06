@@ -48,5 +48,33 @@ class ConnectedNetwork extends AppModel {
  */
 	/*public function __construct() {
 		$this->_setupValidation();
-	}*/  
+	}*/
+    
+    public function isNetworkIdExists($network_id = null) {
+        if (!$network_id) {
+            return false;
+        }
+        return $this->field('id', array('ConnectedNetwork.network_id' => $network_id));
+    }
+    
+/**
+ *  add new social network detail.
+ *
+ *  @author Lucky Saini.
+ *  @access public.
+ *  @param array of connected network detail and integer contact id.
+ *  @return boolean.
+ **/
+    public function addNewNetwork($post = array(), $contact_id = null) {
+        $data['ConnectedNetwork']['access_token'] = $post['ConnectedNetwork']['0']['access_token'];
+        $data['ConnectedNetwork']['url'] = $post['ConnectedNetwork']['0']['url'];
+        $data['ConnectedNetwork']['network_id'] = $post['ConnectedNetwork']['0']['network_id'];
+        $data['ConnectedNetwork']['provider'] = $post['ConnectedNetwork']['0']['provider'];
+        $data['ConnectedNetwork']['contact_id'] = $contact_id;
+        $this->set($data);
+        if ($this->save()) {
+            return true;
+        }
+        return false;
+    }
 }

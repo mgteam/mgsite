@@ -3,10 +3,11 @@
     define('SELECT_EMPTY', '--Please Select--');
 	define('TITLE', 'Mengra');
 	define('EMIL_FROM','no-reply@mengra.com');
+	define('ADMIN_PAGE_LIMIT', 10);
 
     class UserGroup{
         const SuperAdmin    = '1';
-        const User          = '2';
+        const User          = '3';
     }
     
     class TimeFormat{

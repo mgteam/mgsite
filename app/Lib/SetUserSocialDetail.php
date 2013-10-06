@@ -58,7 +58,9 @@ class SetUserSocialDetail {
         $contact['Contact']['locale'] = $data['locale'];
         $contact['Contact']['given_name'] = $data['given_name'];
         $contact['Contact']['family_name'] = $data['family_name'];
-        $contact['Contact']['dob'] = date(TimeFormat::DatabaseDate, strtotime($data['dob']));
+        if (isset($data['dob']) && !empty($data['dob'])) {
+            $contact['Contact']['dob'] = date(TimeFormat::DatabaseDate, strtotime($data['dob']));
+        }
         return $contact;
     }
     
@@ -236,17 +238,34 @@ class SetUserSocialDetail {
     }
     
 /**
- *  get location of user.
+ *  save user profile image.
+ *
+ *  @author Lucky Saini.
+ *  @access public.
+ *  @param array of user profile info and integer contact id.
+ *  @return string image name.
  **/
-    /*public function getLocation($raw_data = array()) {
-        $location = null;
-        if(isset($raw_data->location) && !empty($raw_data->location)) {
-            foreach($raw_data->location as $key => $val) {
-                if(gettype($key) == 'string' && $key == 'name'){
-                    $location = $val;
+    public function saveProfileImage($raw_data = array()) {
+
+        $image_url = isset($raw_data['picture']) ? $raw_data['picture'] : null;
+        if(empty($image_url)){
+            return false;
+        } else {
+            $path_parts = pathinfo($image_url);
+            if(empty($path_parts['extension'])){
+                $message['error'] = "There is no extensions exists";
+            }else{
+                $contact_folder_path = APP . 'webroot' . DS . 'img' . DS . 'contacts_images' . DS;
+                $ext  = $path_parts['extension'];
+                $name = 'image_'.uniqid();
+                $image_name = $name.'.'.$ext;
+                $img = $contact_folder_path . $image_name;
+                if(file_put_contents($img, file_get_contents($image_url))){
+                    return $image_name;
+                }else{
+                    return false;
                 }
             }
         }
-        return $location;
-    }*/
+    }
 }

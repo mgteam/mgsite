@@ -1,79 +1,69 @@
-<tr style="border:0px">
-	<td class="content_cell" style="border:0px">
-		<table class="form_table" width="100%">
-            <tr>
-                <td class=label>
-                    <?php echo h("Email");?> <span class="required_field">*</span>
-                </td>
-                <td class=control>
-                    <?php
-                        echo $this->Form->input('email', array('class' => 'validEmail notEmpty'));
-                        //if (!empty($this->data['User']['id'])) {
-                        //    echo $this->Html->link(
-                        //        'Change Password',
-                        //        array(
-                        //            'action'=>'reset_password',
-                        //            $this->data['User']['id']
-                        //        ),
-                        //        array(
-                        //            'class'=>'hello',
-                        //        )
-                        //    );
-                        //}
-                    ?>
-                </td>
-            </tr>
-	    <tr>
-                <td class=label>
-                    <?php echo __("First Name");?> <span class="required_field">*</span>
-                </td>
-                <td class=control>
-                    <?php echo $this->Form->input('first_name', array('class'=>'notEmpty'));?>
-                </td>
-            </tr>
-	     <tr>
-                <td class=label>
-                    <?php echo __("Last Name");?> <span class="required_field">*</span>
-                </td>
-                <td class=control>
-                    <?php echo $this->Form->input('last_name', array('class'=>'notEmpty'));?>
-                </td>
-            </tr>
-            <?php if (empty($this->data['User']['id'])) {?>
-                <tr>
-                    <td class=label>
-                        <?php echo __("Password");?> <span class="required_field">*</span>
-                    </td>
-                    <td class=control>
-                        <?php echo $this->Form->input('password', array('class' => 'notEmpty validPassword'));?>
-                    </td>
-                </tr>
-                
-                <tr>
-                    <td class=label>
-                        <?php echo __("Confirm Password");?> <span class="required_field">*</span>
-                    </td>
-                    <td class=control>
-                        <?php
-                            echo $this->Form->input(
-                                'confirm_password',
-                                array(
-                                    'type' => 'password',
-                                    'class' => 'notEmpty validPassword'
-                                )
-                            );
-                        ?>
-                    </td>
-                </tr>
-            <?php }?>
-            <tr>
-                <td class=label>
-                    <?php echo __("Active");?>
-                </td>
-                <td class=control>
-                    <?php echo $this->Form->input('is_active',array('type'=>'checkbox'));?>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
+<div class="row-fluid">
+	<div class="span6">
+		<?php
+			echo $this->TB->input(
+				'User.group_id', 
+				array(
+					'class' => 'span12',
+					'empty' => SELECT_EMPTY,
+					'label' => 'Group *',
+					'required' => true,
+				)
+			); 
+		?>
+	</div>
+	<div class="span6">
+		<?php
+			echo $this->TB->input(
+				'User.first_name', 
+				array(
+					'class' => 'span12',
+					'label' => 'First Name *',
+					'required' => true,
+				)
+			); 
+		?>
+	</div>
+</div>
+<div class="row-fluid">
+	<div class="span6">
+		<?php
+			echo $this->TB->input(
+				'User.last_name',
+				array(
+					'class' => 'span12',
+					'label' => 'Last Name *',
+					'required' => true,
+				)
+			);
+		?>
+	</div>
+	<div class="span6">
+		<?php
+			echo $this->TB->input(
+				'User.email',
+				array(
+					'class' => 'span12 email',
+					'type' => 'text',
+					'label' => 'Email *',
+					'required' => true,
+				)
+			);
+		?>
+	</div>
+</div>
+<?php $this->start('script'); ?>
+<script type="text/javascript">
+	$('#UserAdminForm').validate({
+		messages: {
+			'data[User][group_id]': 'Please select user group.',
+			'data[User][first_name]': 'Please enter first_name.',
+			'data[User][last_name]': 'Please enter last name.',
+			'data[User][email]': {
+                required: 'Please enter email address.',
+                email: 'Please enter valid email address.'
+            }
+		}
+	});
+</script>
+<?php $this->end(); ?>

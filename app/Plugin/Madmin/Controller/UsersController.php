@@ -11,7 +11,7 @@ class UsersController extends MadminAppController {
  *
  * @var mixed
  */
-	public $scaffold;
+	//public $scaffold;
 
 /**
  * Controller name
@@ -23,12 +23,13 @@ class UsersController extends MadminAppController {
 	public $presetVars = true; // using the model configuration
 
 /**
- *	Madmin dashboard.
+ *	override parent before filter method of plugin app controller.
  *
  *	@access public.
  **/
-	public function dashboard(){
-		
+	public function beforeFilter(){
+		parent::beforeFilter();
+		$this->set('title_for_layout', 'User Manager');
 	}
 	
 /**
@@ -58,13 +59,14 @@ class UsersController extends MadminAppController {
 				}
 					
 				//$this->Auth->loginRedirect  = array('hub' => true, 'controller' => 'users', 'action' => 'index');
-				$this->Session->setFlash(sprintf(__d('users', '%s, you have successfully logged in.'), $this->Auth->user('first_name')));
+				$this->Site->successFlash(sprintf(__d('users', '%s, you have successfully logged in.'), $this->Auth->user('first_name')));
 				$this->redirect($this->Auth->redirect());
 			} else {
 				$this->request->data['User']['password'] = null;
-				$this->Session->setFlash(sprintf(__d('users', 'Invalid e-mail / password combination.  Please try again.')));
+				$this->Site->errorFlash(sprintf(__d('users', 'Invalid e-mail / password combination.  Please try again.')));
 			}
 		}
+		$this->set('title_for_layout', 'User Login');
 	}
 	
 /**
@@ -78,9 +80,20 @@ class UsersController extends MadminAppController {
 		$this->Session->destroy();
 		$this->Cookie->destroy();
 		//$this->saveHistory();
-		$this->Session->setFlash(
+		$this->Site->successFlash(
 			sprintf(__d('users', '%s you have successfully logged out.', $user['first_name'])));
 		$this->redirect($this->Auth->logout());
+	}
+	
+	public function index(){
+		$this->User->recursive = -1;
+		$this->Prg->commonProcess();
+		$conditions = $this->User->parseCriteria($this->passedArgs);
+		$conditions['User.group_id <>'] = UserGroup::SuperAdmin;
+		$this->Paginator->settings['conditions'] = $conditions;
+        $users = $this->Paginator->paginate('User');
+		$sideSection = 'index';
+        $this->set(compact('users', 'sideSection'));
 	}
 	
 /**
@@ -89,33 +102,34 @@ class UsersController extends MadminAppController {
  *	@access public.
  **/
 	public function add(){
-		debug($this->User->hash('testdata', null, true));
 		if (!empty($this->data)) {
 				$this->User->create();
 				$this->request->data['User']['group_id'] = UserGroup::User;
 				$this->request->data['User']['password'] = $this->User->hash($this->request->data['User']['password'], 'sha1', true);
-				//debug($this->request->data['User']['password']);
-				//exit();
 				
 				if ($this->User->save($this->data)) {
 					$this->redirect(array('action' => 'index'));
 				} else {
-					$this->Session->setFlash(__('The record could not be saved. Please, try again.', true));
+					$this->Site->errorFlash('The record could not be saved. Please, try again.');
 				}
 		}
 	}
 	
-	public function index(){
-		$this->User->recursive = 0;
-		$this->Prg->commonProcess();
-		$conditions = $this->User->parseCriteria($this->passedArgs);
-        $this->paginate = array(
-        	'conditions' => $conditions
-		);
-        $this->set('users', $this->paginate());
+/**
+ *	add
+ *
+ *	@access public.
+ **/
+	public function view($id = null){
+		if (!$this->User->exists($id)) {
+			throw new NotFoundException(__('Invalid user'));
+		}
+		
+		$options['conditions']['User.id'] = $id;
+		$user = $this->User->getRecord($options, 0);
+		$this->set(compact('user'));
 	}
-	
-	/**
+/**
  * edit method
  *
  * @throws NotFoundException
@@ -128,10 +142,10 @@ class UsersController extends MadminAppController {
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->User->save($this->request->data)) {
-				$this->Session->setFlash(__('The user has been saved'));
+				$this->Site->successFlash('The user has been saved');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The user could not be saved. Please, try again.'));
+				$this->Site->errorFlash('The user could not be saved. Please, try again.');
 			}
 		} else {
 			$options = array('conditions' => array('User.' . $this->User->primaryKey => $id));
@@ -152,11 +166,41 @@ class UsersController extends MadminAppController {
 			throw new NotFoundException(__('Invalid user'));
 		}
 		if ($this->User->delete($id)) {
-			$this->Session->setFlash(__('User deleted'));
+			$this->Site->successFlash('User deleted');
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('User was not deleted'));
+		$this->Site->errorFlash('User was not deleted');
 		$this->redirect(array('action' => 'index'));
+	}
+	
+/**
+ * function to return filterActions for index view
+ */
+	public function index_filters() {
+		return array(
+			'fields' => array(
+				'User.search' => array(
+					'placeholder' => 'Username'
+				)
+			)
+		);
+	}
+
+	public function quick_links() {
+		return array(
+			'sections' => array(
+				__('Users') => array(
+					__('List all Users') => array(
+						'controller' => 'users',
+						'action' => 'index'
+					),
+					__('Add new User') => array(
+						'controller' => 'users',
+						'action' => 'add'
+					)
+				)
+			)
+		);
 	}
 }
 ?>

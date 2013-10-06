@@ -1,68 +1,63 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
 <head>
-	<?php echo $this->Html->charset(); ?>
-	<title>
-		<?php echo $title_for_layout; ?>
-	</title>
-	
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title><?php echo __('User Login'); ?></title>
+
+	<!-- css section -->
 	<?php
-		echo $this->Html->meta('Madmin.icon');
-		echo $this->Html->css(array('Madmin.style'));
-		echo $scripts_for_layout;
+		echo $this->Html->css(
+			array(
+				'Madmin.bootstrap',
+				'Madmin.bootstrap-responsive'
+			)
+		);
 	?>
+	<style>
+		body {
+	        padding-top: 40px;
+	        padding-bottom: 40px;
+	        background-color: #f5f5f5;
+      	}
+
+  		.form-signin {
+	        max-width: 300px;
+	        padding: 19px 29px 29px;
+	        margin: 0 auto 20px;
+	        background-color: #fff;
+	        border: 1px solid #e5e5e5;
+	        -webkit-border-radius: 5px;
+	           -moz-border-radius: 5px;
+	                border-radius: 5px;
+	        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+	                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      	}
+      	.form-signin .form-signin-heading,
+      	.form-signin .checkbox {
+        	margin-bottom: 10px;
+      	}
+	</style>
+	<!-- end of css section -->
 </head>
 <body>
-	<div id='wrapper'>
-		<div id='header'>
-			<div id='header-content'>
-				<?php echo $this->Html->image('images/logo.png', array('class'=>'logo', 'height'=>'45px'))?>
-			</div><!-- header content -->
-			<div id='header-strip' class='strip'>
-				<div id="header-strip-content">
-					<span class='current_date'><?php echo date('d F Y')?></span>
-					<span class="header-logout">
-						<?php echo $this->Html->link(__('Sign Up'),array('controller'=>'users','action'=>'register'));?>
-					</span>
-				</div>
-			</div><!-- header-strip -->
-		</div><!-- header end -->
-		
-		
-		<div id='content-wrapper'>
-			<div id='content'>
-				<?php echo $content_for_layout;?>
-			</div><!-- content ends here -->
-		</div><!-- content wrapper ends -->
-		
-		<div id='footer' class='strip'>
-			Web Design London //
-			<?php
-				echo $this->Html->link(
-					'Mangra Design',
-					'http://mangra.com',
-					array(
-						'target' => '_black'
-					)
-				);
-			?>
-			<!--<a href="http://jbiwebdesign.co.uk" target="_blank">JBi Web Design </a>-->
-		</div><!-- -->
-	</div><!-- wrapper end -->
-	<!--================== JS here ==================-->
+	<div class="container">
 		<?php
-			echo $this->Html->script( array(
-				'Madmin.jquery-1.8.3.min',
-				'Madmin.jquery.placeholder'
-				)
-			);
+			echo $content_for_layout;
 		?>
-	<script>
-		jQuery(document).ready(function(){
-			jQuery("#sidenav").height( jQuery(".Mcontent").height() );
-		});
-	</script>
-	<!--================== JS end ==================-->
-	<?php echo $this->element('sql_dump'); ?>
+	</div>
+	<!-- js section -->
+	<?php
+		echo $this->Html->script(
+			array(
+				'Madmin.jquery',
+				'Madmin.bootstrap',
+				'Madmin.jquery-ui-1.10.3.custom.min',
+				'Madmin.jquery.validate',
+			)
+		);
+		echo $this->fetch('script');
+	?>
+	<!-- end of js section -->
 </body>
 </html>

@@ -125,6 +125,7 @@ require_once('site_constants.php');
 
 CakePlugin::load('Madmin', array('bootstrap' => true, 'routes' => true));
 CakePlugin::load('Timthumb', array('routes' => true, 'bootstrap' => true));
+CakePlugin::load('TwitterBootstrap');
 
 /**
  * Load Validation Messages Configuration Files

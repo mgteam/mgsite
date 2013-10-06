@@ -366,10 +366,7 @@ class UsersController extends AppController {
  */
 	private function __successfulExtAuth($incomingProfile, $accessToken) {
 		$contact = $response = array();
-        
-		//just for demo
-		//$incomingProfile['email'] = 'luckys383@gmail.com';
-		
+
 		// set data accourding to social media.
 		if ($incomingProfile['provider'] == 'Facebook') {
 			$contact = SetUserSocialDetail::setFacebookData($incomingProfile, $accessToken);
@@ -386,6 +383,16 @@ class UsersController extends AppController {
 					// TODO:: Update or Create user connected network data
 					// TODO:: If connect with facebook then import contacts
 				} else {
+					
+					// save user connected network detail.
+					$network_id = $contact['ConnectedNetwork']['0']['network_id'];
+					if (!$this->User->Contact->ConnectedNetwork->isNetworkIdExists($network_id)) {
+						$contact_id = $this->User->Contact->getContactId($contact['Contact']['email']);
+						$this->User->Contact->ConnectedNetwork->addNewNetwork($contact, $contact_id);
+					}
+					
+					//$this->User->saveContactProfileImage();
+					
 					$user['User']['email'] = $contact['Contact']['email'];
 					// log in
 					$this->__doAuthLogin($user);
@@ -401,7 +408,7 @@ class UsersController extends AppController {
                     $user_profile_detail = SetUserSocialDetail::setFacebookUserDetail($incomingProfile['raw']);
                     $response = array_merge($response, $user_profile_detail);
                 }
-                
+				
 				unset($response['User']);
 				$this->User->Contact->saveAll($user_contact);
 				$this->Session->setFlash(__('Congratulations, your account is successfully completed.'));
@@ -537,5 +544,19 @@ class UsersController extends AppController {
 			'user' => $email_vars
 		);
 		return SendMail::sendEmail($options);
+	}
+    
+/**
+ * Sets the cookie to remember the user
+ *
+ * @param array RememberMe (Cookie) component properties as array, like array('domain' => 'yourdomain.com')
+ * @param string Cookie data keyname for the userdata, its default is "User". This is set to User and NOT using the model alias to make sure it works with different apps with different user models across different (sub)domains.
+ * @return void
+ * @deprecated Use the RememberMe Component
+ */
+	protected function _setCookie($options = array(), $cookieKey = 'rememberMe') {
+		$this->RememberMe->settings['cookieKey'] = $cookieKey;
+		$this->RememberMe->configureCookie($options);
+		$this->RememberMe->setCookie();
 	}
 }

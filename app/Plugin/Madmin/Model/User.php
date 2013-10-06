@@ -10,6 +10,9 @@ class User extends MadminAppModel {
 
     public $name = 'User';
     
+	public $virtualFields = array(
+		'name' => 'CONCAT(User.first_name, " ", User.last_name)'
+	);
     var $actsAs = array(
 	'SoftDelete'=> array(
             'is_deleted' => 'deleted_on'
@@ -54,7 +57,9 @@ class User extends MadminAppModel {
         'search' => array(
         	'type' => 'like', 
         	'field' => array(
-        		'User.email',
+        		'User.first_name',
+				'User.last_name',
+				'User.name',
                 'User.email'
         	)
         ),
