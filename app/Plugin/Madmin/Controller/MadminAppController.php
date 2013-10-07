@@ -19,14 +19,8 @@ class MadminAppController extends AppController {
 		),
 		'Madmin.Admin',
 		'Madmin.Cdn',
+		'Madmin.Site',
 	);
-	//public $helpers = array('Madmin.Status',
-	//	'Madmin.Cdn',
-	//	'Madmin.Menu',
-	//	'Madmin.BootstrapPaginator',
-	//	'Madmin.Day',
-	//	'Madmin.Time'
-	//);
 
 /**
  * Components

@@ -124,9 +124,7 @@ class UsersController extends MadminAppController {
 		if (!$this->User->exists($id)) {
 			throw new NotFoundException(__('Invalid user'));
 		}
-		
-		$options['conditions']['User.id'] = $id;
-		$user = $this->User->getRecord($options, 0);
+		$user = $this->User->Contact->getUserContactDetail($id);
 		$this->set(compact('user'));
 	}
 /**

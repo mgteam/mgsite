@@ -4,7 +4,10 @@ App::uses('MadminAppModel', 'Madmin.Model');
  * User Model
  *
  * @property Group $Group
+ * @property Contact $Contact
+ * @property LoginHistory $LoginHistory
  * @property UserProfile $UserProfile
+ * @property Contact $Contact
  */
 class User extends MadminAppModel {
 
@@ -53,6 +56,76 @@ class User extends MadminAppModel {
 		)
 	);
     
+/**
+ * hasMany associations
+ *
+ * @var array
+ */
+	public $hasMany = array(
+		'Contact' => array(
+			'className' => 'Madmin.Contact',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'LoginHistory' => array(
+			'className' => 'LoginHistory',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'UserProfile' => array(
+			'className' => 'UserProfile',
+			'foreignKey' => 'user_id',
+			'dependent' => false,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		)
+	);
+	
+/**
+ * hasAndBelongsToMany associations
+ *
+ * @var array
+ */
+	public $hasAndBelongsToMany = array(
+		'Contact' => array(
+			'className' => 'Madmin.Contact',
+			'joinTable' => 'users_contacts',
+			'foreignKey' => 'user_id',
+			'associationForeignKey' => 'contact_id',
+			'unique' => 'keepExisting',
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'finderQuery' => '',
+			'deleteQuery' => '',
+			'insertQuery' => ''
+		)
+	);
+	
     public $filterArgs = array(
         'search' => array(
         	'type' => 'like', 
